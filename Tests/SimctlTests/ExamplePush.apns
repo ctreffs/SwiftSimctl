@@ -1,0 +1,10 @@
+{
+  "Simulator Target Bundle": "<YOUR_BUNDLE_ID>",
+  "aps": {
+    "alert": {
+      "body": "Some body.",
+      "badge": 1,
+      "title": "A title!"
+    }
+  }
+}

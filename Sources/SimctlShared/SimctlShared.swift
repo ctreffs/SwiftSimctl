@@ -1,0 +1,148 @@
+//
+//  SimctlShared.swift
+//
+//
+//  Created by Christian Treffs on 18.03.20.
+//
+
+import Foundation
+
+public typealias Port = UInt16
+
+public enum PushNotificationContent {
+    case file(URL)
+    case jsonPayload(Data)
+}
+
+extension PushNotificationContent {
+    enum Keys: String, CodingKey {
+        case file
+        case jsonPayload
+    }
+}
+extension PushNotificationContent: Encodable {
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: Keys.self)
+        switch self {
+        case let .file(url):
+            try container.encode(url, forKey: .file)
+
+        case let .jsonPayload(data):
+            try container.encode(data, forKey: .jsonPayload)
+        }
+    }
+}
+
+extension PushNotificationContent: Decodable {
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: Keys.self)
+
+        if let url = try container.decodeIfPresent(URL.self, forKey: .file) {
+            self = .file(url)
+        } else if let data = try container.decodeIfPresent(Data.self, forKey: .jsonPayload) {
+            self = .jsonPayload(data)
+        } else {
+            throw DecodingError.dataCorrupted(DecodingError.Context(codingPath: decoder.codingPath, debugDescription: "unknown case"))
+        }
+    }
+}
+
+/// Swifter makes all header field keys lowercase so we define them lowercase from the start.
+
+public enum HeaderFieldKey: String {
+    case bundleIdentifier = "bundleidentifier"
+    case deviceUdid = "deviceudid"
+    case privacyAction = "privacyaction"
+    case privacyService = "privacyservice"
+}
+
+public enum ServerPath: String {
+    case pushNotification = "/simctl/pushNotification"
+    case privacy = "/simctl/privacy"
+}
+
+/// Some permission changes will terminate the application if running.
+public enum PrivacyAction: String {
+    /// Grant access without prompting. Requires bundle identifier.
+    case grant
+    ///  Revoke access, denying all use of the service. Requires bundle identifier.
+    case revoke
+    ///  Reset access, prompting on next use. Bundle identifier optional.
+    case reset
+}
+
+public enum PrivacyService: String {
+    /// Apply the action to all services.
+    case all
+    /// Allow access to calendar.
+    case calendar
+    /// Allow access to basic contact info.
+    case contactsLimited = "contacts-limited"
+    /// Allow access to full contact details.
+    case contacts
+    /// Allow access to location services when app is in use.
+    case location
+    /// Allow access to location services at all times.
+    case locationAllways = "location-always"
+    /// Allow adding photos to the photo library.
+    case photosAdd = " photos-add"
+    /// Allow full access to the photo library.
+    case photos
+    ///ibrary - Allow access to the media library.
+    case media
+    /// Allow access to audio input.
+    case microphone
+    /// Allow access to motion and fitness data.
+    case motion
+    /// Allow access to reminders.
+    case reminders
+    /// Allow use of the app with Siri.
+    case siri
+}
+
+public struct SimulatorDeviceListing {
+    public enum Keys: String, CodingKey {
+        case devices
+    }
+
+    public let devices: [SimulatorDevice]
+}
+
+extension SimulatorDeviceListing: Decodable {
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: Keys.self)
+        let dict = try container.decode([String: [SimulatorDevice]].self, forKey: .devices)
+        self.devices = dict.values.flatMap { $0 }
+    }
+}
+
+public struct SimulatorDevice {
+    public let udid: UUID
+    public let name: String
+    public let isAvailable: Bool
+    public let deviceTypeIdentifier: String
+    public let state: State
+    public let logPath: URL
+    public let dataPath: URL
+}
+extension SimulatorDevice {
+    public var deviceId: String {
+        udid.uuidString
+    }
+}
+
+extension SimulatorDevice: CustomStringConvertible {
+    public var description: String {
+        "<SimulatorDevice[\(deviceId)]: \(name) (\(state))>"
+    }
+}
+
+extension SimulatorDevice {
+    public enum State: String {
+        case shutdown = "Shutdown"
+        case booted = "Booted"
+    }
+}
+
+extension SimulatorDevice: Decodable { }
+extension SimulatorDevice.State: Decodable { }
