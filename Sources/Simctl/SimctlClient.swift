@@ -9,7 +9,13 @@ import struct Foundation.UUID
 import struct Foundation.Data
 import class Foundation.URLSession
 import SimctlShared
+#if canImport(UIKit)
 import UIKit
+#elseif canImport(AppKit)
+import AppKit
+#else
+#error("Unsupported platform!")
+#endif
 
 public class SimctlClient {
     public static let host: Host = .localhost(port: 8080)
