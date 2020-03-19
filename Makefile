@@ -1,5 +1,21 @@
 # Version 1.0.0
 UNAME_S := $(shell uname -s)
+PREFIX?=/usr/local
+SIMCTLCLI_NAME = SimctlCLI
+
+# Build SimctlCLI release
+buildSimctlCLI:
+	swift build -c release --product $(SIMCTLCLI_NAME)
+	@echo "`swift build -c release --product $(SIMCTLCLI_NAME) --show-bin-path`/$(SIMCTLCLI_NAME)"
+
+cleanBuildSimctlCLI: cleanArtifacts buildSimctlCLI
+
+installSimctlCLI: buildSimctlCLI
+	mkdir -p $(PREFIX)/bin
+	install `swift build -c release --product $(SIMCTLCLI_NAME) --show-bin-path`/$(SIMCTLCLI_NAME) $(PREFIX)/bin
+
+uninstallSimctlCLI:
+	rm -f $(PREFIX)/bin/$(SIMCTLCLI_NAME)
 
 # Lint
 lint:
