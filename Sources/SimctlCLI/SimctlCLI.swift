@@ -12,6 +12,10 @@ import ShellOut
 import SimctlShared
 import Swifter
 
+/// **SimctlCLI**
+///
+/// A command line interface to run a server accepting remote commands from your app to execute locally.
+///
 public class SimctlCLI {
     let server: SimctlServer
     let log: Logger
@@ -82,7 +86,7 @@ struct Simctl: ParsableCommand {
 
     struct StartServer: ParsableCommand {
         @Option(default: 8080, help: "The port to run the server on.")
-        var port: UInt16
+        var port: SimctlShared.Port
 
         func run() throws {
             SimctlCLI.instance.server.startServer(on: port)

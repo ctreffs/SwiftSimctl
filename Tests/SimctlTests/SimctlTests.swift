@@ -8,41 +8,24 @@
 import Simctl
 import XCTest
 
-/*
- Camera:       com.apple.camera
- AppStore:     com.apple.AppStore
- Contacts:     com.apple.MobileAddressBook
- Mail:         com.apple.mobilemail
- GameCenter:   com.apple.gamecenter
- MobileSafari: com.apple.mobilesafari
- Preferences:  com.apple.Preferences
- iPod:         com.apple.mobileipod
- Photos:       com.apple.mobileslideshow
- Calendar:     com.apple.mobilecal
- Clock:        com.apple.mobiletimer
-
- */
-
-let payload: String = """
-{
-"Simulator Target Bundle": "<#YOUR_BUNDLE_ID#>",
-"aps": {
-"alert": {
-"body": "A very good body...",
-"badge": 1,
-"title": "My special title!"
-}
-}
-}
-"""
-
 class SimctlLibTests: XCTestCase {
-    lazy var simctl = SimctlClient(SimulatorEnvironment(bundleIdentifier: "<#YOUR_BUNDLE_ID#>",
+    lazy var simctl = SimctlClient(SimulatorEnvironment(bundleIdentifier: "com.mybundle.id",
                                                         host: .localhost(port: 8080))!)
-
     func testRequestPushNotification() {
         let exp = expectation(description: "\(#function)")
 
+        let payload: String = """
+        {
+        "Simulator Target Bundle": "com.mybundle.id",
+        "aps": {
+        "alert": {
+        "body": "A very good body...",
+        "badge": 1,
+        "title": "My special title!"
+        }
+        }
+        }
+        """
         let jsonData = payload.data(using: .utf8)!
 
         simctl.requestPushNotification(.jsonPayload(jsonData)) {

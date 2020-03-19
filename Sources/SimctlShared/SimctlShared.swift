@@ -10,7 +10,19 @@ import Foundation
 public typealias Port = UInt16
 
 public enum PushNotificationContent {
+    /// Path to a push payload .json/.apns file.
+    ///
+    /// The file must reside on the host machine!
+    /// The file must be a JSON file with a valid Apple Push Notification Service payload, including the “aps” key.
+    /// It must also contain a top-level “Simulator Target Bundle” with a string value
+    /// that matches the target application‘s bundle identifier.
     case file(URL)
+
+    /// Arbitrary json encoded push notification payload.
+    ///
+    /// The payload must be JSON with a valid Apple Push Notification Service payload, including the “aps” key.
+    /// It must also contain a top-level “Simulator Target Bundle” with a string value
+    /// that matches the target application‘s bundle identifier.
     case jsonPayload(Data)
 }
 
@@ -48,7 +60,6 @@ extension PushNotificationContent: Decodable {
 }
 
 /// Swifter makes all header field keys lowercase so we define them lowercase from the start.
-
 public enum HeaderFieldKey: String {
     case bundleIdentifier = "bundleidentifier"
     case deviceUdid = "deviceudid"
