@@ -6,7 +6,7 @@ SIMCTLCLI_NAME = SimctlCLI
 # Build SimctlCLI release
 buildSimctlCLI:
 	@echo "Building..."
-	@swift build -c release --product $(SIMCTLCLI_NAME)
+	@swift build -Xswiftc -Osize -Xswiftc -whole-module-optimization -c release --product $(SIMCTLCLI_NAME) 
 	@echo "Done - $(SIMCTLCLI_NAME) executable at `swift build -c release --product $(SIMCTLCLI_NAME) --show-bin-path`/$(SIMCTLCLI_NAME)"
 
 cleanBuildSimctlCLI: cleanArtifacts buildSimctlCLI
