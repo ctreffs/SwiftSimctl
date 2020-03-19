@@ -17,28 +17,44 @@ import AppKit
 #error("Unsupported platform!")
 #endif
 
+/// SimctlClient provides methods to trigger remote execution of simctl commands from your app on a local machine.
+/// This is acchieved by opening a client-server connection and sending requests to the server
+/// which in turn trigger execution of local commands on the server machine.
 public class SimctlClient {
-    public static let host: Host = .localhost(port: 8080)
+    /// Address and port to the host machine.
+    static var host: Host = .localhost(port: 8080)
 
     let session: URLSession
     let env: SimctlClientEnvironment
 
+    /// Start client in a simulator environment.
+    /// - Parameter simEnv: The simulator environment configuration.
     public convenience init(_ simEnv: SimulatorEnvironment) {
         self.init(environment: simEnv)
     }
 
+    /// Start client in a given environment.
     public init(environment: SimctlClientEnvironment) {
         session = URLSession(configuration: .default)
-
+        Self.host = environment.host
         self.env = environment
     }
 
+    /// Request a push notification to be send to this app.
+    /// - Parameters:
+    ///   - notification: The notifcation payload to be send.
+    ///   - completion: Result callback of the call. Use this to wait for an expectation to fulfull in a test case.
     public func requestPushNotification(_ notification: PushNotificationContent, _ completion: @escaping DataTaskCallback) {
         dataTask(.postPushNotification(env, notification)) { result in
             completion(result)
         }
     }
 
+    /// Request a change in privacy settings for this app.
+    /// - Parameters:
+    ///   - action: The privacy action to be taken
+    ///   - service: The service to be addressed.
+    ///   - completion: Result callback of the call. Use this to wait for an expectation to fulfull in a test case.
     public func requestPrivacyChange(action: PrivacyAction, service: PrivacyService, _ completion: @escaping DataTaskCallback) {
         dataTask(.setPrivacy(env, action, service), completion)
     }
@@ -51,16 +67,31 @@ public protocol SimctlClientEnvironment {
     var deviceUdid: UUID { get }
 }
 public struct SimulatorEnvironment: SimctlClientEnvironment {
+    /// The host address and port of SimctlCLI server.
     public let host: SimctlClient.Host
+
+    /// The bundle identifier of the app you want to address.
     public let bundleIdentifier: String?
+
+    /// The Udid of the device or simulator you want to address.
     public let deviceUdid: UUID
 
+    /// Initialize a simulator environment.
+    /// - Parameters:
+    ///   - host: The host and port of the SimctlCLI server.
+    ///   - bundleIdentifier: The bundle identifier of the app you want to interact with.
+    ///   - deviceUdid: The Udid of the device you want to interact with.
     public init(host: SimctlClient.Host, bundleIdentifier: String?, deviceUdid: UUID) {
         self.host = host
         self.bundleIdentifier = bundleIdentifier
         self.deviceUdid = deviceUdid
     }
 
+    /// Initialize a simulator environment.
+    /// - Parameters:
+    ///   - host: The host and port of the SimctlCLI server.
+    ///   - bundle: Bundle of the app you want to interact with.
+    ///   - processInfo: The process info from where to get the device Udid.
     public init?(host: SimctlClient.Host, bundle: Bundle, processInfo: ProcessInfo) {
         guard let udid = Self.deviceId(processInfo) else {
             return nil
@@ -71,10 +102,13 @@ public struct SimulatorEnvironment: SimctlClientEnvironment {
                   deviceUdid: udid)
     }
 
-    public init?() {
-        self.init(host: .localhost(port: 8080), bundle: .main, processInfo: ProcessInfo())
-    }
-
+    /// Initialize a simulator environment.
+    ///
+    /// The device Udid of this device will be extracted from the process environment for you.
+    ///
+    /// - Parameters:
+    ///   - bundleIdentifier: The bundle identifier of the app you want to interact with.
+    ///   - host: The host and port of the SimctlCLI server.
     public init?(bundleIdentifier: String, host: SimctlClient.Host) {
         guard let udid = Self.deviceId(ProcessInfo()) else {
             return nil
@@ -131,7 +165,7 @@ extension SimctlClient {
     }
 }
 extension SimctlClient.Host {
-    public static func localhost(port: UInt16) -> SimctlClient.Host { SimctlClient.Host("http://localhost:\(port)") }
+    public static func localhost(port: SimctlShared.Port) -> SimctlClient.Host { SimctlClient.Host("http://localhost:\(port)") }
 }
 extension SimctlClient.Host: Equatable { }
 

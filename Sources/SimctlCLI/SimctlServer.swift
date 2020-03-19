@@ -12,7 +12,9 @@ import ShellOut
 import SimctlShared
 import Swifter
 
-class SimctlServer {
+/// The server used to receive commands from an app and
+/// translate them into commands on the local machine.
+final class SimctlServer {
     let log: Logger
     let server: HttpServer
 
@@ -21,6 +23,8 @@ class SimctlServer {
         server = HttpServer()
     }
 
+    /// Start a server that listens to library requests from your app and executes simctl commands on your machine.
+    /// - Parameter port: the port on which to listen.
     func startServer(on port: SimctlShared.Port) {
         do {
             try server.start(port)
@@ -31,10 +35,13 @@ class SimctlServer {
         }
     }
 
+    /// Stop the server.
     func stop() {
         server.stop()
     }
 
+    /// Callback to be executed on push notifcation send request.
+    /// - Parameter closure: The closure to be executed.
     func onPushNotification(_ closure: @escaping (UUID, String?, PushNotificationContent) -> Result<String, Swift.Error>) {
         server.POST[ServerPath.pushNotification.rawValue] = { request in
             guard let deviceId = request.headerValue(for: .deviceUdid, UUID.init) else {
@@ -65,6 +72,8 @@ class SimctlServer {
         }
     }
 
+    /// Callback to be exectured on privacy change request.
+    /// - Parameter closure: The closure to be executed.
     func onPrivacy(_ closure: @escaping (UUID, String?, PrivacyAction, PrivacyService) -> Result<String, Swift.Error>) {
         server.GET[ServerPath.privacy.rawValue] = { request in
             guard let deviceId = request.headerValue(for: .deviceUdid, UUID.init) else {
