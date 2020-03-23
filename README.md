@@ -27,21 +27,19 @@ To enable calling these commands `Simctl` communicates over a local network conn
 
 `SimctlCLI` is a small command line tool that opens a local server, listens to requrests from `Simctl` (the client library) and executes `xcrun simctl` commands.
 
-
-For specific usage please refer to the example project **<https://github.com/ctreffs/SwiftSimctlExample>**
-
-## 🎌 Pros & Cons
-
 #### ➕ Pro
+
 - Enclosed system (Mac with Xcode + Simulator)
 - No external dependencies to systems like [APNS](https://developer.apple.com/library/archive/documentation/NetworkingInternet/Conceptual/RemoteNotificationsPG/APNSOverview.html)
-- No custom testing code, bloating your code base necessary
+- No custom testing code bloating your code base unnecessarily
 - Your app stays a black box and does not need to be modified
 
 #### ➖ Contra
+
 - Needs a little configuration in your Xcode project
 - Only available for Xcode 11.4+ and Swift 5.2+
 
+For specific usage please refer to the example project **<https://github.com/ctreffs/SwiftSimctlExample>**
 
 ## 🚀 Getting Started
 
