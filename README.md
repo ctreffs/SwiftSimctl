@@ -16,7 +16,7 @@ It enables, among other things reliable, **fully automated** testing of Push Not
 ### 🚧 Architecture
 
 <p align="center">
-	<a href="docs/Overview.png" target="_blank"><img src="docs/Overview.png" height="400"/></a>
+	<a href="docs/Overview.png" target="_blank"><img src="docs/Overview.png" height="500"/></a>
 </p>
 
 Swift Simctl is made of two parts. `SimctlCLI` and `Simctl`.
@@ -32,6 +32,8 @@ To enable calling these commands `Simctl` communicates over a local network conn
 - Enclosed system (Mac with Xcode + Simulator)
 - No external dependencies to systems like [APNS](https://developer.apple.com/library/archive/documentation/NetworkingInternet/Conceptual/RemoteNotificationsPG/APNSOverview.html)
 - No custom testing code bloating your code base unnecessarily
+- Push notifications can be simulated properly and the normal app cycle is preserved
+- Runs on CI machines
 - Your app stays a black box and does not need to be modified
 
 #### ➖ Contra
