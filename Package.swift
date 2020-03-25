@@ -37,9 +37,7 @@ let package = Package(
                 dependencies: [
                     .byName(name: "SimctlShared"),
                     .product(name: "Logging", package: "swift-log")
-        ]),
-        .testTarget(name: "SimctlTests",
-                    dependencies: ["Simctl"])
+        ])
         
     ]
 )
