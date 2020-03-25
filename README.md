@@ -27,6 +27,8 @@ To enable calling these commands `Simctl` communicates over a local network conn
 
 `SimctlCLI` is a small command line tool that opens a local server, listens to requrests from `Simctl` (the client library) and executes `xcrun simctl` commands.
 
+## ❔ Why would you use this
+
 #### ➕ Pro
 
 - Enclosed system (Mac with Xcode + Simulator)
@@ -72,7 +74,7 @@ In Xcode:
 
 Ensure that for the duration of your test run `SimctlCLI` runs on your host machine.
 
-To automate that with Xcode itself use the following snipets as pre and post action of your test.
+To automate that with Xcode itself use the following snipets as pre and post action of your test target.
 
 ###### Test > Pre-Actions > Run Script
 
@@ -110,7 +112,7 @@ Please refer to the example project for a in depth code example
 
 * [Christian Treffs](https://github.com/ctreffs)
 
-See also the list of [contributors](https://github.com/ctreffs/SwiftImGui/contributors) who participated in this project.
+See also the list of [contributors](contributors) who participated in this project.
 
 ## 🔏 Licenses
 
