@@ -66,6 +66,24 @@ public class SimctlCLI {
 
             return self.runCommand(cmd)
         }
+
+        server.onUninstallApp { [unowned self] deviceId, _, appBundleId -> Result<String, Error> in
+            let cmd: ShellOutCommand = .simctlUninstallApp(device: deviceId, appBundleIdentifier: appBundleId)
+            return self.runCommand(cmd)
+        }
+
+        server.onSetStatusBarOverride { [unowned self] deviceId, _, overrides -> Result<String, Error> in
+            let cmd: ShellOutCommand = .simctlSetStatusBarOverrides(device: deviceId,
+                                                                    overrides: overrides)
+
+            return self.runCommand(cmd)
+        }
+
+        server.onClearStatusBarOverrides { [unowned self] deviceId, _ -> Result<String, Error> in
+            let cmd: ShellOutCommand = .simctlClearStatusBarOverrides(device: deviceId)
+
+            return self.runCommand(cmd)
+        }
     }
 
     deinit {
