@@ -69,6 +69,7 @@ public enum HeaderFieldKey: String {
     case privacyService = "privacy_service"
     case deviceName = "device_name"
     case targetBundleIdentifier = "target_bundle_identifier"
+    case deviceAppearance = "device_appearance"
 }
 
 public enum ServerPath: String {
@@ -76,6 +77,7 @@ public enum ServerPath: String {
     case privacy = "/simctl/setPrivacy"
     case renameDevice = "/simctl/renameDevice"
     case terminateApp = "/simctl/terminateApp"
+    case deviceAppearance = "/simctl/setDeviceAppearance"
 }
 
 /// Some permission changes will terminate the application if running.
@@ -115,6 +117,13 @@ public enum PrivacyService: String {
     case reminders
     /// Allow use of the app with Siri.
     case siri
+}
+
+public enum DeviceAppearance: String {
+    /// The Light appearance style.
+    case light
+    /// The Dark appearance style.
+    case dark
 }
 
 public struct SimulatorDeviceListing {

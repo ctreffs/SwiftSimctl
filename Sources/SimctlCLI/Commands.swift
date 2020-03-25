@@ -50,8 +50,8 @@ extension ShellOutCommand {
     }
 
     /// Usage: simctl ui <device> <option> [<arguments>]
-    static func simctlSetUI(apperance: DeviceApperance, on device: UUID) -> ShellOutCommand {
-        .init(string: simctl("ui \(device.uuidString) appearance \(apperance.rawValue)"))
+    static func simctlSetUI(appearance: DeviceAppearance, on device: UUID) -> ShellOutCommand {
+        .init(string: simctl("ui \(device.uuidString) appearance \(appearance.rawValue)"))
     }
 
     /// xcrun simctl push <device> com.example.my-app ExamplePush.apns
@@ -102,9 +102,4 @@ enum ListFilterType: String {
     case runtimes
     case pairs
     case noFilter = ""
-}
-
-enum DeviceApperance: String {
-    case light
-    case dark
 }

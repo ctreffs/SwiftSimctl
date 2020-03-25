@@ -71,8 +71,12 @@ public class SimctlClient {
     /// - Parameters:
     ///   - appBundleIdentifier: The bundle identifier of the app to terminate.
     ///   - completion: Result callback of the call. Use this to wait for an expectation to fulfill in a test case.
-    public func terminateApp(_ appBundleIdentifier: String, complection: @escaping DataTaskCallback) {
-        dataTask(.terminateApp(env, appBundleIdentifier), complection)
+    public func terminateApp(_ appBundleIdentifier: String, _ completion: @escaping DataTaskCallback) {
+        dataTask(.terminateApp(env, appBundleIdentifier), completion)
+    }
+
+    public func setDeviceAppearance(_ appearance: DeviceAppearance, _ completion: @escaping DataTaskCallback) {
+        dataTask(.setDeviceAppearance(env, appearance), completion)
     }
 }
 
@@ -202,6 +206,7 @@ extension SimctlClient {
         case setPrivacy(SimctlClientEnvironment, PrivacyAction, PrivacyService)
         case renameDevice(SimctlClientEnvironment, String)
         case terminateApp(SimctlClientEnvironment, String)
+        case setDeviceAppearance(SimctlClientEnvironment, DeviceAppearance)
 
         @inlinable var httpMethod: HttpMethod {
             switch self {
@@ -210,7 +215,8 @@ extension SimctlClient {
 
             case .setPrivacy,
                  .renameDevice,
-                 .terminateApp:
+                 .terminateApp,
+                 .setDeviceAppearance:
                 return .get
             }
         }
@@ -228,6 +234,9 @@ extension SimctlClient {
 
             case .terminateApp:
                 return .terminateApp
+
+            case .setDeviceAppearance:
+                return .deviceAppearance
             }
         }
 
@@ -236,7 +245,8 @@ extension SimctlClient {
             case .postPushNotification,
                  .setPrivacy,
                  .renameDevice,
-                 .terminateApp:
+                 .terminateApp,
+                 .setDeviceAppearance:
                 return nil
             }
         }
@@ -272,6 +282,11 @@ extension SimctlClient {
                 var fields = setEnv(env)
                 fields.append(HeaderField(.targetBundleIdentifier, appBundleIdentifier))
                 return fields
+
+            case let .setDeviceAppearance(env, appearance):
+                var fields = setEnv(env)
+                fields.append(HeaderField(.deviceAppearance, appearance.rawValue))
+                return fields
             }
         }
 
@@ -283,7 +298,8 @@ extension SimctlClient {
 
             case .setPrivacy,
                  .renameDevice,
-                 .terminateApp:
+                 .terminateApp,
+                 .setDeviceAppearance:
                 return nil
             }
         }

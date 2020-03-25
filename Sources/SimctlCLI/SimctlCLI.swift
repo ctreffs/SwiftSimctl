@@ -54,6 +54,12 @@ public class SimctlCLI {
 
             return self.runCommand(cmd)
         }
+
+        server.onSetDeviceAppearance {[unowned self] deviceId, _, appearance -> Result<String, Error> in
+            let cmd: ShellOutCommand = .simctlSetUI(appearance: appearance, on: deviceId)
+
+            return self.runCommand(cmd)
+        }
     }
 
     deinit {
