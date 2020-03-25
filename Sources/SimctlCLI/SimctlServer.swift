@@ -72,7 +72,7 @@ final class SimctlServer {
         }
     }
 
-    /// Callback to be exectured on privacy change request.
+    /// Callback to be executed on privacy change request.
     /// - Parameter closure: The closure to be executed.
     func onPrivacy(_ closure: @escaping (UUID, String?, PrivacyAction, PrivacyService) -> Result<String, Swift.Error>) {
         server.GET[ServerPath.privacy.rawValue] = { request in
@@ -104,7 +104,7 @@ final class SimctlServer {
         }
     }
 
-    /// Callback to be exectured on rename device request.
+    /// Callback to be executed on rename device request.
     /// - Parameter closure: The closure to be executed.
     func onRename(_ closure: @escaping (UUID, String?, String) -> Result<String, Swift.Error>) {
         server.GET[ServerPath.renameDevice.rawValue] = { request in
@@ -132,7 +132,7 @@ final class SimctlServer {
         }
     }
 
-    /// Callback to be exectured on terminate app device request.
+    /// Callback to be executed on terminate app device request.
     /// - Parameter closure: The closure to be executed.
     func onTerminateApp(_ closure: @escaping (UUID, String?, String) -> Result<String, Swift.Error>) {
         server.GET[ServerPath.terminateApp.rawValue] = { request in
@@ -197,6 +197,34 @@ final class SimctlServer {
             }
 
             let result = closure(deviceId, bundleId)
+
+            switch result {
+            case let .success(output):
+                return .ok(.text(output))
+
+            case let .failure(error):
+                return .badRequest(.text(error.localizedDescription))
+            }
+        }
+    }
+
+    /// Callback to be executed on uninstall app device request.
+    /// - Parameter closure: The closure to be executed.
+    func onUninstallApp(_ closure: @escaping (UUID, String?, String) -> Result<String, Swift.Error>) {
+        server.GET[ServerPath.uninstallApp.rawValue] = { request in
+            guard let deviceId = request.headerValue(for: .deviceUdid, UUID.init) else {
+                return .badRequest(.text("Device Udid missing or corrupt."))
+            }
+
+            guard let bundleId = request.headerValue(for: .bundleIdentifier) else {
+                return .badRequest(.text("Bundle Id missing or corrupt."))
+            }
+
+            guard let targetAppBundleId: String = request.headerValue(for: .targetBundleIdentifier) else {
+                return .badRequest(.text("No target app bundle id parameter provided."))
+            }
+
+            let result = closure(deviceId, bundleId, targetAppBundleId)
 
             switch result {
             case let .success(output):

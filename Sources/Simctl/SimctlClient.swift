@@ -88,6 +88,14 @@ public class SimctlClient {
     public func triggerICloudSync(_ completion: @escaping DataTaskCallback) {
         dataTask(.triggerICloudSync(env), completion)
     }
+
+    /// Uninstall an app from this device.
+    /// - Parameters:
+    ///   - appBundleIdentifier: The bundle identifier of the app to uninstall.
+    ///   - completion: Result callback of the call. Use this to wait for an expectation to fulfill in a test case.
+    public func uninstallApp(_ appBundleIdentifier: String, _ completion: @escaping DataTaskCallback) {
+        dataTask(.uninstallApp(env, appBundleIdentifier), completion)
+    }
 }
 
 // MARK: - Enviroment {
@@ -218,6 +226,7 @@ extension SimctlClient {
         case terminateApp(SimctlClientEnvironment, String)
         case setDeviceAppearance(SimctlClientEnvironment, DeviceAppearance)
         case triggerICloudSync(SimctlClientEnvironment)
+        case uninstallApp(SimctlClientEnvironment, String)
 
         @inlinable var httpMethod: HttpMethod {
             switch self {
@@ -228,7 +237,8 @@ extension SimctlClient {
                  .renameDevice,
                  .terminateApp,
                  .setDeviceAppearance,
-                 .triggerICloudSync:
+                 .triggerICloudSync,
+                 .uninstallApp:
                 return .get
             }
         }
@@ -252,6 +262,9 @@ extension SimctlClient {
 
             case .triggerICloudSync:
                 return .iCloudSync
+
+            case .uninstallApp:
+                return .uninstallApp
             }
         }
 
@@ -262,7 +275,8 @@ extension SimctlClient {
                  .renameDevice,
                  .terminateApp,
                  .setDeviceAppearance,
-                 .triggerICloudSync:
+                 .triggerICloudSync,
+                 .uninstallApp:
                 return nil
             }
         }
@@ -285,7 +299,6 @@ extension SimctlClient {
 
             case let .setPrivacy(env, action, service):
                 var fields = setEnv(env)
-
                 fields.append(HeaderField(.privacyAction, action.rawValue))
                 fields.append(HeaderField(.privacyService, service.rawValue))
                 return fields
@@ -295,7 +308,8 @@ extension SimctlClient {
                 fields.append(HeaderField(.deviceName, name))
                 return fields
 
-            case let .terminateApp(env, appBundleIdentifier):
+            case let .terminateApp(env, appBundleIdentifier),
+                 let .uninstallApp(env, appBundleIdentifier):
                 var fields = setEnv(env)
                 fields.append(HeaderField(.targetBundleIdentifier, appBundleIdentifier))
                 return fields
@@ -317,7 +331,8 @@ extension SimctlClient {
                  .renameDevice,
                  .terminateApp,
                  .setDeviceAppearance,
-                 .triggerICloudSync:
+                 .triggerICloudSync,
+                 .uninstallApp:
                 return nil
             }
         }

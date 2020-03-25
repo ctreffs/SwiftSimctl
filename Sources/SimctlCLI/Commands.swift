@@ -103,6 +103,17 @@ extension ShellOutCommand {
     static func simctlTriggerICloudSync(device: UUID) -> ShellOutCommand {
         .init(string: simctl("icloud_sync \(device.uuidString)"))
     }
+
+    /// Uninstall an app from a device.
+    ///
+    /// Usage: simctl uninstall <device> <app bundle identifier>
+    ///
+    /// - Parameters:
+    ///   - device: The device Udid
+    ///   - appBundleIdentifier: App bundle identifier of the app to uninstall.
+    static func simctlUninstallApp(device: UUID, appBundleIdentifier: String) -> ShellOutCommand {
+        .init(string: simctl("uninstall \(device.uuidString) \(appBundleIdentifier)"))
+    }
 }
 
 enum ListFilterType: String {
