@@ -119,7 +119,7 @@ Please refer to the example project for an in depth code example.
 
 **<https://github.com/ctreffs/SwiftSimctlExample>**
 
-🙏 Kudos
+## 🙏 Kudos
 
 `Simctl` would not be possible without these awesome packages:
 
