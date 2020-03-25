@@ -9,9 +9,9 @@
 </p>   
 
 
-This is a small tool (SimctlCLI) and library (Simctl) written in Swift to automate [`xcrun simctl`](https://developer.apple.com/library/archive/documentation/IDEs/Conceptual/iOS_Simulator_Guide/InteractingwiththeiOSSimulator/InteractingwiththeiOSSimulator.html#//apple_ref/doc/uid/TP40012848-CH3-SW4) commands for Simulator in unit and UI tests.
+This is a small tool (SimctlCLI) and library (Simctl), written in Swift, to automate [`xcrun simctl`](https://developer.apple.com/library/archive/documentation/IDEs/Conceptual/iOS_Simulator_Guide/InteractingwiththeiOSSimulator/InteractingwiththeiOSSimulator.html#//apple_ref/doc/uid/TP40012848-CH3-SW4) commands for Simulator in unit and UI tests.
 
-It enables, among other things reliable, **fully automated** testing of Push Notifications with dynamic content and driven by a UI Test you control.
+It enables, among other things, reliable **fully automated** testing of Push Notifications with dynamic content, and driven by a UI Test you control.
 
 ### 🚧 Architecture
 
@@ -25,15 +25,15 @@ Swift Simctl is made of two parts. `SimctlCLI` and `Simctl`.
 It provides an interface to commands that are otherwise only available via `xcrun simctl` from within your test code.
 To enable calling these commands `Simctl` communicates over a local network connection to `SimctlCLI`.
 
-`SimctlCLI` is a small command line tool that opens a local server, listens to requrests from `Simctl` (the client library) and executes `xcrun simctl` commands.
+`SimctlCLI` is a small command line tool that starts a local server, listens to requrests from `Simctl` (the client library) and executes `xcrun simctl` commands.
 
-## ❔ Why would you use this
+## ❔ Why would you (not) use this
 
 #### ➕ Pro
 
-- Enclosed system (Mac with Xcode + Simulator)
-- No external dependencies to systems like [APNS](https://developer.apple.com/library/archive/documentation/NetworkingInternet/Conceptual/RemoteNotificationsPG/APNSOverview.html)
-- No custom testing code bloating your code base unnecessarily
+- Closed system (Mac with Xcode + Simulator)
+- No external dependencies on systems like [APNS](https://developer.apple.com/library/archive/documentation/NetworkingInternet/Conceptual/RemoteNotificationsPG/APNSOverview.html)
+- No custom test code bloating your code base unnecessarily
 - Push notifications can be simulated properly and the normal app cycle is preserved
 - Runs on CI machines
 - Your app stays a black box and does not need to be modified
@@ -104,7 +104,7 @@ killall SimctlCLI
 
 ### 📝 Code Example
 
-Please refer to the example project for a in depth code example 
+Please refer to the example project for an in depth code example.
 
 **<https://github.com/ctreffs/SwiftSimctlExample>**
 
