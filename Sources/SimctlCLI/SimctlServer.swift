@@ -132,6 +132,8 @@ final class SimctlServer {
         }
     }
 
+    /// Callback to be exectured on terminate app device request.
+    /// - Parameter closure: The closure to be executed.
     func onTerminateApp(_ closure: @escaping (UUID, String?, String) -> Result<String, Swift.Error>) {
         server.GET[ServerPath.terminateApp.rawValue] = { request in
             guard let deviceId = request.headerValue(for: .deviceUdid, UUID.init) else {

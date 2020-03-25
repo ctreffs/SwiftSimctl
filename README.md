@@ -108,6 +108,16 @@ Please refer to the example project for an in depth code example.
 
 **<https://github.com/ctreffs/SwiftSimctlExample>**
 
+🙏 Kudos
+
+`Simctl` would not be possible without these awesome packages:
+
+- [ShellOut](https://github.com/JohnSundell/ShellOut) - easy command line invocations
+- [Swifter](https://github.com/httpswift/swifter) - a tiny http server
+- [Swift Log](https://github.com/apple/swift-log) - Apple's logger lib
+- [Swift Argument Parser](https://github.com/apple/swift-argument-parser) - Apple's command line argument parsing lib
+
+
 ## ✍️ Authors
 
 * [Christian Treffs](https://github.com/ctreffs)
