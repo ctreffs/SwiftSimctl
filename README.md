@@ -33,9 +33,11 @@ The following commands will be available in code in your (test) targets:
 
 - Send push notifications with custom payload
 - Grant or revoke privacy permissions
-- Rename device
-- Terminate app by bundle id
 - Set the device UI appearance to light or dark mode
+- Set status bar overrides i.e. data network or time
+- Uninstall app by bundle id
+- Terminate app by bundle id
+- Rename device
 - Trigger iCloud Sync
 
 ## ❔ Why would you (not) use this

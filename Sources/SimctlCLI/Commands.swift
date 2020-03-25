@@ -103,6 +103,35 @@ extension ShellOutCommand {
     static func simctlTriggerICloudSync(device: UUID) -> ShellOutCommand {
         .init(string: simctl("icloud_sync \(device.uuidString)"))
     }
+
+    /// Uninstall an app from a device.
+    ///
+    /// Usage: simctl uninstall <device> <app bundle identifier>
+    ///
+    /// - Parameters:
+    ///   - device: The device Udid
+    ///   - appBundleIdentifier: App bundle identifier of the app to uninstall.
+    static func simctlUninstallApp(device: UUID, appBundleIdentifier: String) -> ShellOutCommand {
+        .init(string: simctl("uninstall \(device.uuidString) \(appBundleIdentifier)"))
+    }
+
+    /// Clear status bar overrides
+    ///
+    /// Usage: simctl status_bar <device> clear
+    /// - Parameter device: The device Udid
+    static func simctlClearStatusBarOverrides(device: UUID) -> ShellOutCommand {
+        .init(string: "status_bar clear")
+    }
+
+    /// Set status bar overrides
+    ///
+    /// Usage: simctl status_bar <device> override <override arguments>
+    /// - Parameters:
+    ///   - device: The device Udid
+    ///   - overrides: A set of overrides to set.
+    static func simctlSetStatusBarOverrides(device: UUID, overrides: Set<StatusBarOverride>) -> ShellOutCommand {
+        .init(string: simctl("status_bar \(device.uuidString) \(overrides.map { $0.command }.joined(separator: " "))"))
+    }
 }
 
 enum ListFilterType: String {
