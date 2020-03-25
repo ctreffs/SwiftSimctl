@@ -29,10 +29,13 @@ To enable calling these commands `Simctl` communicates over a local network conn
 
 ### ⌨ Available Commands
 
+The following commands will be available in code in your (test) targets:
+
 - Send push notifications with custom payload
 - Grant or revoke privacy permissions
 - Rename device
 - Terminate app by bundle id
+- Set the device UI appearance to light or dark mode
 
 ## ❔ Why would you (not) use this
 
