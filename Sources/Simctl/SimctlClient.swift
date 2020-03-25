@@ -96,6 +96,14 @@ public class SimctlClient {
     public func uninstallApp(_ appBundleIdentifier: String, _ completion: @escaping DataTaskCallback) {
         dataTask(.uninstallApp(env, appBundleIdentifier), completion)
     }
+
+    /// Set status bar overrides for this device.
+    /// - Parameters:
+    ///   - overrides: A set of status bar overrides.
+    ///   - completion: Result callback of the call. Use this to wait for an expectation to fulfill in a test case.
+    public func setStatusBarOverrides(_ overrides: Set<StatusBarOverride>, _ completion: @escaping DataTaskCallback) {
+        dataTask(.setStatusBarOverrides(env, overrides), completion)
+    }
 }
 
 // MARK: - Enviroment {
@@ -227,10 +235,12 @@ extension SimctlClient {
         case setDeviceAppearance(SimctlClientEnvironment, DeviceAppearance)
         case triggerICloudSync(SimctlClientEnvironment)
         case uninstallApp(SimctlClientEnvironment, String)
+        case setStatusBarOverrides(SimctlClientEnvironment, Set<StatusBarOverride>)
 
         @inlinable var httpMethod: HttpMethod {
             switch self {
-            case .sendPushNotification:
+            case .sendPushNotification,
+                 .setStatusBarOverrides:
                 return .post
 
             case .setPrivacy,
@@ -265,6 +275,9 @@ extension SimctlClient {
 
             case .uninstallApp:
                 return .uninstallApp
+
+            case .setStatusBarOverrides:
+                return .statusBarOverrides
             }
         }
 
@@ -276,7 +289,8 @@ extension SimctlClient {
                  .terminateApp,
                  .setDeviceAppearance,
                  .triggerICloudSync,
-                 .uninstallApp:
+                 .uninstallApp,
+                 .setStatusBarOverrides:
                 return nil
             }
         }
@@ -294,7 +308,8 @@ extension SimctlClient {
 
             switch self {
             case let .sendPushNotification(env, _),
-                 let .triggerICloudSync(env):
+                 let .triggerICloudSync(env),
+                 let .setStatusBarOverrides(env, _):
                 return setEnv(env)
 
             case let .setPrivacy(env, action, service):
@@ -326,6 +341,9 @@ extension SimctlClient {
             switch self {
             case let .sendPushNotification(_, notification):
                 return try? encoder.encode(notification)
+
+            case let .setStatusBarOverrides(_, overrides):
+                return try? encoder.encode(overrides)
 
             case .setPrivacy,
                  .renameDevice,

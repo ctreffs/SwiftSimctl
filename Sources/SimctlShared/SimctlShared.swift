@@ -82,6 +82,7 @@ public enum ServerPath: String {
     case deviceAppearance = "/simctl/setDeviceAppearance"
     case iCloudSync = "/simctl/iCloudSync"
     case uninstallApp = "/simctl/uninstallApp"
+    case statusBarOverrides = "/simctl/statusBarOverrides"
 }
 
 /// Some permission changes will terminate the application if running.

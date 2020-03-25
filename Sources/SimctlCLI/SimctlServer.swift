@@ -235,4 +235,36 @@ final class SimctlServer {
             }
         }
     }
+
+    /// Callback to be executed on set status bar override request.
+    /// - Parameter closure: The closure to be executed.
+    func onSetStatusBarOverride(_ closure: @escaping (UUID, String?, Set<StatusBarOverride>) -> Result<String, Swift.Error>) {
+        server.POST[ServerPath.statusBarOverrides.rawValue] = { request in
+            guard let deviceId = request.headerValue(for: .deviceUdid, UUID.init) else {
+                return .badRequest(.text("Device Udid missing or corrupt."))
+            }
+
+            guard let bundleId = request.headerValue(for: .bundleIdentifier) else {
+                return .badRequest(.text("Bundle Id missing or corrupt."))
+            }
+
+            let bodyData = Data(request.body)
+            let decoder = JSONDecoder()
+            do {
+                let overrides: Set<StatusBarOverride> = try decoder.decode(Set<StatusBarOverride>.self, from: bodyData)
+
+                let result = closure(deviceId, bundleId, overrides)
+
+                switch result {
+                case let .success(output):
+                    return .ok(.text(output))
+
+                case let .failure(error):
+                    return .badRequest(.text(error.localizedDescription))
+                }
+            } catch {
+                return .badRequest(.text(error.localizedDescription))
+            }
+        }
+    }
 }
