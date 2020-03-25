@@ -43,7 +43,7 @@ public class SimctlClient {
     /// Request a push notification to be send to this app.
     /// - Parameters:
     ///   - notification: The notifcation payload to be send.
-    ///   - completion: Result callback of the call. Use this to wait for an expectation to fulfull in a test case.
+    ///   - completion: Result callback of the call. Use this to wait for an expectation to fulfill in a test case.
     public func requestPushNotification(_ notification: PushNotificationContent, _ completion: @escaping DataTaskCallback) {
         dataTask(.postPushNotification(env, notification)) { result in
             completion(result)
@@ -54,7 +54,7 @@ public class SimctlClient {
     /// - Parameters:
     ///   - action: The privacy action to be taken
     ///   - service: The service to be addressed.
-    ///   - completion: Result callback of the call. Use this to wait for an expectation to fulfull in a test case.
+    ///   - completion: Result callback of the call. Use this to wait for an expectation to fulfill in a test case.
     public func requestPrivacyChange(action: PrivacyAction, service: PrivacyService, _ completion: @escaping DataTaskCallback) {
         dataTask(.setPrivacy(env, action, service), completion)
     }
