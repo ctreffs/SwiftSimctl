@@ -23,7 +23,7 @@ public class SimctlCLI {
     static let instance = SimctlCLI()
 
     public init() {
-        log = Logger(label: "com.simctl.cli")
+        log = Logger(label: "com.ctreffs.simctlcli")
         server = SimctlServer()
 
         server.onPushNotification { [unowned self] deviceId, bundleId, pushContent -> Result<String, Error> in
@@ -39,6 +39,30 @@ public class SimctlCLI {
                                                       permissionsFor: service,
                                                       on: deviceId,
                                                       bundleIdentifier: bundleId)
+
+            return self.runCommand(cmd)
+        }
+
+        server.onRename { [unowned self] deviceId, _, newName -> Result<String, Error> in
+            let cmd: ShellOutCommand = .simctlRename(device: deviceId, to: newName)
+
+            return self.runCommand(cmd)
+        }
+
+        server.onTerminateApp { [unowned self] deviceId, _, appBundleId -> Result<String, Error> in
+            let cmd: ShellOutCommand = .simctlTerminateApp(device: deviceId, appBundleIdentifier: appBundleId)
+
+            return self.runCommand(cmd)
+        }
+
+        server.onSetDeviceAppearance {[unowned self] deviceId, _, appearance -> Result<String, Error> in
+            let cmd: ShellOutCommand = .simctlSetUI(appearance: appearance, on: deviceId)
+
+            return self.runCommand(cmd)
+        }
+
+        server.onTriggerICloudSync { [unowned self] deviceId, _ -> Result<String, Error> in
+            let cmd: ShellOutCommand = .simctlTriggerICloudSync(device: deviceId)
 
             return self.runCommand(cmd)
         }

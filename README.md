@@ -27,6 +27,17 @@ To enable calling these commands `Simctl` communicates over a local network conn
 
 `SimctlCLI` is a small command line tool that starts a local server, listens to requrests from `Simctl` (the client library) and executes `xcrun simctl` commands.
 
+### ⌨ Available Commands
+
+The following commands will be available in code in your (test) targets:
+
+- Send push notifications with custom payload
+- Grant or revoke privacy permissions
+- Rename device
+- Terminate app by bundle id
+- Set the device UI appearance to light or dark mode
+- Trigger iCloud Sync
+
 ## ❔ Why would you (not) use this
 
 #### ➕ Pro
@@ -107,6 +118,16 @@ killall SimctlCLI
 Please refer to the example project for an in depth code example.
 
 **<https://github.com/ctreffs/SwiftSimctlExample>**
+
+🙏 Kudos
+
+`Simctl` would not be possible without these awesome packages:
+
+- [ShellOut](https://github.com/JohnSundell/ShellOut) - easy command line invocations
+- [Swifter](https://github.com/httpswift/swifter) - a tiny http server
+- [Swift Log](https://github.com/apple/swift-log) - Apple's logger lib
+- [Swift Argument Parser](https://github.com/apple/swift-argument-parser) - Apple's command line argument parsing lib
+
 
 ## ✍️ Authors
 

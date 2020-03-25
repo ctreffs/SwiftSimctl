@@ -5,7 +5,9 @@
 //  Created by Christian Treffs on 18.03.20.
 //
 
-import Foundation
+import struct Foundation.URL
+import struct Foundation.Data
+import struct Foundation.UUID
 
 public typealias Port = UInt16
 
@@ -61,15 +63,22 @@ extension PushNotificationContent: Decodable {
 
 /// Swifter makes all header field keys lowercase so we define them lowercase from the start.
 public enum HeaderFieldKey: String {
-    case bundleIdentifier = "bundleidentifier"
-    case deviceUdid = "deviceudid"
-    case privacyAction = "privacyaction"
-    case privacyService = "privacyservice"
+    case bundleIdentifier = "bundle_identifier"
+    case deviceUdid = "device_udid"
+    case privacyAction = "privacy_action"
+    case privacyService = "privacy_service"
+    case deviceName = "device_name"
+    case targetBundleIdentifier = "target_bundle_identifier"
+    case deviceAppearance = "device_appearance"
 }
 
 public enum ServerPath: String {
     case pushNotification = "/simctl/pushNotification"
-    case privacy = "/simctl/privacy"
+    case privacy = "/simctl/setPrivacy"
+    case renameDevice = "/simctl/renameDevice"
+    case terminateApp = "/simctl/terminateApp"
+    case deviceAppearance = "/simctl/setDeviceAppearance"
+    case iCloudSync = "/simctl/iCloudSync"
 }
 
 /// Some permission changes will terminate the application if running.
@@ -109,6 +118,13 @@ public enum PrivacyService: String {
     case reminders
     /// Allow use of the app with Siri.
     case siri
+}
+
+public enum DeviceAppearance: String {
+    /// The Light appearance style.
+    case light
+    /// The Dark appearance style.
+    case dark
 }
 
 public struct SimulatorDeviceListing {
