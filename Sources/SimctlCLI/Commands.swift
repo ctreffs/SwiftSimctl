@@ -9,8 +9,6 @@ import Foundation
 import ShellOut
 import SimctlShared
 
-// https://medium.com/@ankitkumargupta/ios-simulator-command-line-tricks-ee58054d30f4
-
 extension ShellOutCommand {
     static func openSimulator() -> ShellOutCommand {
         .init(string: "open -b com.apple.iphonesimulator")
@@ -52,8 +50,8 @@ extension ShellOutCommand {
     }
 
     /// Usage: simctl ui <device> <option> [<arguments>]
-    static func simctlSetUI(apperance: DeviceApperance, on device: UUID) -> ShellOutCommand {
-        .init(string: simctl("ui \(device.uuidString) appearance \(apperance.rawValue)"))
+    static func simctlSetUI(appearance: DeviceAppearance, on device: UUID) -> ShellOutCommand {
+        .init(string: simctl("ui \(device.uuidString) appearance \(appearance.rawValue)"))
     }
 
     /// xcrun simctl push <device> com.example.my-app ExamplePush.apns
@@ -71,9 +69,39 @@ extension ShellOutCommand {
     }
 
     ///  simctl privacy <device> <action> <service> [<bundle identifier>]
-
     static func simctlPrivacy(_ action: PrivacyAction, permissionsFor service: PrivacyService, on device: UUID, bundleIdentifier: String?) -> ShellOutCommand {
         .init(string: simctl("privacy \(device.uuidString) \(action.rawValue) \(service.rawValue) \(bundleIdentifier ?? "")"))
+    }
+
+    /// Rename a device.
+    ///
+    /// Usage: simctl rename <device> <name>
+    ///
+    /// - Parameters:
+    ///   - device: The device Udid
+    ///   - name: The new name
+    static func simctlRename(device: UUID, to name: String) -> ShellOutCommand {
+        .init(string: simctl("rename \(device.uuidString) \(name)"))
+    }
+
+    /// Terminate an application by identifier on a device.
+    ///
+    /// Usage: simctl terminate <device> <app bundle identifier>
+    ///
+    /// - Parameters:
+    ///   - device: The device Udid
+    ///   - appBundleIdentifier: App bundle identifier of the app to terminate.
+    static func simctlTerminateApp(device: UUID, appBundleIdentifier: String) -> ShellOutCommand {
+        .init(string: simctl("terminate \(device.uuidString) \(appBundleIdentifier)"))
+    }
+
+    /// Trigger iCloud sync on a device.
+    ///
+    /// Usage: simctl icloud_sync <device>
+    ///
+    /// - Parameter device: The device Udid
+    static func simctlTriggerICloudSync(device: UUID) -> ShellOutCommand {
+        .init(string: simctl("icloud_sync \(device.uuidString)"))
     }
 }
 
@@ -83,9 +111,4 @@ enum ListFilterType: String {
     case runtimes
     case pairs
     case noFilter = ""
-}
-
-enum DeviceApperance: String {
-    case light
-    case dark
 }

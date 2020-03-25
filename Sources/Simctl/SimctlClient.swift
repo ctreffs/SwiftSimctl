@@ -43,7 +43,7 @@ public class SimctlClient {
     /// Request a push notification to be send to this app.
     /// - Parameters:
     ///   - notification: The notifcation payload to be send.
-    ///   - completion: Result callback of the call. Use this to wait for an expectation to fulfull in a test case.
+    ///   - completion: Result callback of the call. Use this to wait for an expectation to fulfill in a test case.
     public func requestPushNotification(_ notification: PushNotificationContent, _ completion: @escaping DataTaskCallback) {
         dataTask(.postPushNotification(env, notification)) { result in
             completion(result)
@@ -54,9 +54,39 @@ public class SimctlClient {
     /// - Parameters:
     ///   - action: The privacy action to be taken
     ///   - service: The service to be addressed.
-    ///   - completion: Result callback of the call. Use this to wait for an expectation to fulfull in a test case.
-    public func requestPrivacyChange(action: PrivacyAction, service: PrivacyService, _ completion: @escaping DataTaskCallback) {
+    ///   - completion: Result callback of the call. Use this to wait for an expectation to fulfill in a test case.
+    public func setPrivacy(action: PrivacyAction, service: PrivacyService, _ completion: @escaping DataTaskCallback) {
         dataTask(.setPrivacy(env, action, service), completion)
+    }
+
+    /// Rename the current device to given name.
+    /// - Parameters:
+    ///   - newName: The new name of the device.
+    ///   - completion: Result callback of the call. Use this to wait for an expectation to fulfill in a test case.
+    public func renameDevice(to newName: String, _ completion: @escaping DataTaskCallback) {
+        dataTask(.renameDevice(env, newName), completion)
+    }
+
+    /// Terminate the app with given app bundle identifier.
+    /// - Parameters:
+    ///   - appBundleIdentifier: The bundle identifier of the app to terminate.
+    ///   - completion: Result callback of the call. Use this to wait for an expectation to fulfill in a test case.
+    public func terminateApp(_ appBundleIdentifier: String, _ completion: @escaping DataTaskCallback) {
+        dataTask(.terminateApp(env, appBundleIdentifier), completion)
+    }
+
+    /// Set the device UI appearance to given appearance
+    /// - Parameters:
+    ///   - appearance: The appearance - currently light or dark.
+    ///   - completion: Result callback of the call. Use this to wait for an expectation to fulfill in a test case.
+    public func setDeviceAppearance(_ appearance: DeviceAppearance, _ completion: @escaping DataTaskCallback) {
+        dataTask(.setDeviceAppearance(env, appearance), completion)
+    }
+
+    /// Trigger iCloud sync on this device.
+    /// - Parameter completion: Result callback of the call. Use this to wait for an expectation to fulfill in a test case.
+    public func triggerICloudSync(_ completion: @escaping DataTaskCallback) {
+        dataTask(.triggerICloudSync(env), completion)
     }
 }
 
@@ -184,30 +214,55 @@ extension SimctlClient {
     public enum Route {
         case postPushNotification(SimctlClientEnvironment, PushNotificationContent)
         case setPrivacy(SimctlClientEnvironment, PrivacyAction, PrivacyService)
+        case renameDevice(SimctlClientEnvironment, String)
+        case terminateApp(SimctlClientEnvironment, String)
+        case setDeviceAppearance(SimctlClientEnvironment, DeviceAppearance)
+        case triggerICloudSync(SimctlClientEnvironment)
 
         @inlinable var httpMethod: HttpMethod {
             switch self {
             case .postPushNotification:
                 return .post
 
-            case .setPrivacy:
+            case .setPrivacy,
+                 .renameDevice,
+                 .terminateApp,
+                 .setDeviceAppearance,
+                 .triggerICloudSync:
                 return .get
             }
         }
 
-        @inlinable var path: String {
+        @inlinable var path: ServerPath {
             switch self {
             case .postPushNotification:
-                return "/simctl/pushNotification"
+                return .pushNotification
+
             case .setPrivacy:
-                return "/simctl/privacy"
+                return .privacy
+
+            case .renameDevice:
+                return .renameDevice
+
+            case .terminateApp:
+                return .terminateApp
+
+            case .setDeviceAppearance:
+                return .deviceAppearance
+
+            case .triggerICloudSync:
+                return .iCloudSync
             }
         }
 
         @inlinable var queryItems: [URLQueryItem]? {
             switch self {
             case .postPushNotification,
-                 .setPrivacy:
+                 .setPrivacy,
+                 .renameDevice,
+                 .terminateApp,
+                 .setDeviceAppearance,
+                 .triggerICloudSync:
                 return nil
             }
         }
@@ -224,7 +279,8 @@ extension SimctlClient {
             }
 
             switch self {
-            case let .postPushNotification(env, _):
+            case let .postPushNotification(env, _),
+                 let .triggerICloudSync(env):
                 return setEnv(env)
 
             case let .setPrivacy(env, action, service):
@@ -232,6 +288,21 @@ extension SimctlClient {
 
                 fields.append(HeaderField(.privacyAction, action.rawValue))
                 fields.append(HeaderField(.privacyService, service.rawValue))
+                return fields
+
+            case let .renameDevice(env, name):
+                var fields = setEnv(env)
+                fields.append(HeaderField(.deviceName, name))
+                return fields
+
+            case let .terminateApp(env, appBundleIdentifier):
+                var fields = setEnv(env)
+                fields.append(HeaderField(.targetBundleIdentifier, appBundleIdentifier))
+                return fields
+
+            case let .setDeviceAppearance(env, appearance):
+                var fields = setEnv(env)
+                fields.append(HeaderField(.deviceAppearance, appearance.rawValue))
                 return fields
             }
         }
@@ -242,13 +313,17 @@ extension SimctlClient {
             case let .postPushNotification(_, notification):
                 return try? encoder.encode(notification)
 
-            case .setPrivacy:
+            case .setPrivacy,
+                 .renameDevice,
+                 .terminateApp,
+                 .setDeviceAppearance,
+                 .triggerICloudSync:
                 return nil
             }
         }
 
         func asURL() -> URL {
-            let urlString: String = SimctlClient.host.host + path
+            let urlString: String = SimctlClient.host.host + path.rawValue
             guard var components = URLComponents(string: urlString) else {
                 fatalError("no valid url \(urlString)")
             }
@@ -263,13 +338,6 @@ extension SimctlClient {
 
             request.httpMethod = httpMethod.rawValue
 
-            // let defaultHeaderFields: [HeaderField] = [
-            //     // 'Authorization: OAuth [your access token]'
-            //     .init("Authorization", "OAuth " + developerAccessToken)
-            // ]
-            //
-            // let allHeaderFields: [HeaderField] = headerFields + defaultHeaderFields
-            //
             for field in headerFields {
                 request.addValue(field.value, forHTTPHeaderField: field.headerField.rawValue)
             }
