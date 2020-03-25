@@ -36,6 +36,7 @@ The following commands will be available in code in your (test) targets:
 - Rename device
 - Terminate app by bundle id
 - Set the device UI appearance to light or dark mode
+- Trigger iCloud Sync
 
 ## ❔ Why would you (not) use this
 
