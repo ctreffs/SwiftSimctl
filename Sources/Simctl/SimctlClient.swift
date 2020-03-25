@@ -66,6 +66,14 @@ public class SimctlClient {
     public func renameDevice(to newName: String, _ completion: @escaping DataTaskCallback) {
         dataTask(.renameDevice(env, newName), completion)
     }
+
+    /// Terminate the app with given app bundle identifier.
+    /// - Parameters:
+    ///   - appBundleIdentifier: The bundle identifier of the app to terminate.
+    ///   - completion: Result callback of the call. Use this to wait for an expectation to fulfill in a test case.
+    public func terminateApp(_ appBundleIdentifier: String, complection: @escaping DataTaskCallback) {
+        dataTask(.terminateApp(env, appBundleIdentifier), complection)
+    }
 }
 
 // MARK: - Enviroment {
@@ -193,6 +201,7 @@ extension SimctlClient {
         case postPushNotification(SimctlClientEnvironment, PushNotificationContent)
         case setPrivacy(SimctlClientEnvironment, PrivacyAction, PrivacyService)
         case renameDevice(SimctlClientEnvironment, String)
+        case terminateApp(SimctlClientEnvironment, String)
 
         @inlinable var httpMethod: HttpMethod {
             switch self {
@@ -200,7 +209,8 @@ extension SimctlClient {
                 return .post
 
             case .setPrivacy,
-                 .renameDevice:
+                 .renameDevice,
+                 .terminateApp:
                 return .get
             }
         }
@@ -215,6 +225,9 @@ extension SimctlClient {
 
             case .renameDevice:
                 return .renameDevice
+
+            case .terminateApp:
+                return .terminateApp
             }
         }
 
@@ -222,7 +235,8 @@ extension SimctlClient {
             switch self {
             case .postPushNotification,
                  .setPrivacy,
-                 .renameDevice:
+                 .renameDevice,
+                 .terminateApp:
                 return nil
             }
         }
@@ -253,6 +267,11 @@ extension SimctlClient {
                 var fields = setEnv(env)
                 fields.append(HeaderField(.deviceName, name))
                 return fields
+
+            case let .terminateApp(env, appBundleIdentifier):
+                var fields = setEnv(env)
+                fields.append(HeaderField(.targetBundleIdentifier, appBundleIdentifier))
+                return fields
             }
         }
 
@@ -263,7 +282,8 @@ extension SimctlClient {
                 return try? encoder.encode(notification)
 
             case .setPrivacy,
-                 .renameDevice:
+                 .renameDevice,
+                 .terminateApp:
                 return nil
             }
         }

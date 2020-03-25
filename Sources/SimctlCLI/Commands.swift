@@ -83,6 +83,17 @@ extension ShellOutCommand {
     static func simctlRename(device: UUID, to name: String) -> ShellOutCommand {
         .init(string: simctl("rename \(device.uuidString) \(name)"))
     }
+
+    /// Terminate an application by identifier on a device.
+    ///
+    /// Usage: simctl terminate <device> <app bundle identifier>
+    ///
+    /// - Parameters:
+    ///   - device: The device Udid
+    ///   - appBundleIdentifier: App bundle identifier of the app to terminate.
+    static func simctlTerminateApp(device: UUID, appBundleIdentifier: String) -> ShellOutCommand {
+        .init(string: simctl("terminate \(device.uuidString) \(appBundleIdentifier)"))
+    }
 }
 
 enum ListFilterType: String {

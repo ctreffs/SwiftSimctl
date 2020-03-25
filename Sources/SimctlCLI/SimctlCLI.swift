@@ -48,6 +48,12 @@ public class SimctlCLI {
 
             return self.runCommand(cmd)
         }
+
+        server.onTerminateApp { [unowned self] deviceId, _, appBundleId -> Result<String, Error> in
+            let cmd: ShellOutCommand = .simctlTerminateApp(device: deviceId, appBundleIdentifier: appBundleId)
+
+            return self.runCommand(cmd)
+        }
     }
 
     deinit {
