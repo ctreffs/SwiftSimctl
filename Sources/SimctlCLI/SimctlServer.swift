@@ -185,4 +185,26 @@ final class SimctlServer {
             }
         }
     }
+
+    func onTriggerICloudSync(_ closure: @escaping (UUID, String?) -> Result<String, Swift.Error>) {
+        server.GET[ServerPath.iCloudSync.rawValue] = { request in
+            guard let deviceId = request.headerValue(for: .deviceUdid, UUID.init) else {
+                return .badRequest(.text("Device Udid missing or corrupt."))
+            }
+
+            guard let bundleId = request.headerValue(for: .bundleIdentifier) else {
+                return .badRequest(.text("Bundle Id missing or corrupt."))
+            }
+
+            let result = closure(deviceId, bundleId)
+
+            switch result {
+            case let .success(output):
+                return .ok(.text(output))
+
+            case let .failure(error):
+                return .badRequest(.text(error.localizedDescription))
+            }
+        }
+    }
 }

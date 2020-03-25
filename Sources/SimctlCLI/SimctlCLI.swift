@@ -60,6 +60,12 @@ public class SimctlCLI {
 
             return self.runCommand(cmd)
         }
+
+        server.onTriggerICloudSync { [unowned self] deviceId, _ -> Result<String, Error> in
+            let cmd: ShellOutCommand = .simctlTriggerICloudSync(device: deviceId)
+
+            return self.runCommand(cmd)
+        }
     }
 
     deinit {

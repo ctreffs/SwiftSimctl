@@ -94,6 +94,15 @@ extension ShellOutCommand {
     static func simctlTerminateApp(device: UUID, appBundleIdentifier: String) -> ShellOutCommand {
         .init(string: simctl("terminate \(device.uuidString) \(appBundleIdentifier)"))
     }
+
+    /// Trigger iCloud sync on a device.
+    ///
+    /// Usage: simctl icloud_sync <device>
+    ///
+    /// - Parameter device: The device Udid
+    static func simctlTriggerICloudSync(device: UUID) -> ShellOutCommand {
+        .init(string: simctl("icloud_sync \(device.uuidString)"))
+    }
 }
 
 enum ListFilterType: String {

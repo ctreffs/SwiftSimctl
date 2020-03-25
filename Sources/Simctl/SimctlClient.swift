@@ -75,8 +75,18 @@ public class SimctlClient {
         dataTask(.terminateApp(env, appBundleIdentifier), completion)
     }
 
+    /// Set the device UI appearance to given appearance
+    /// - Parameters:
+    ///   - appearance: The appearance - currently light or dark.
+    ///   - completion: Result callback of the call. Use this to wait for an expectation to fulfill in a test case.
     public func setDeviceAppearance(_ appearance: DeviceAppearance, _ completion: @escaping DataTaskCallback) {
         dataTask(.setDeviceAppearance(env, appearance), completion)
+    }
+
+    /// Trigger iCloud sync on this device.
+    /// - Parameter completion: Result callback of the call. Use this to wait for an expectation to fulfill in a test case.
+    public func triggerICloudSync(_ completion: @escaping DataTaskCallback) {
+        dataTask(.triggerICloudSync(env), completion)
     }
 }
 
@@ -207,6 +217,7 @@ extension SimctlClient {
         case renameDevice(SimctlClientEnvironment, String)
         case terminateApp(SimctlClientEnvironment, String)
         case setDeviceAppearance(SimctlClientEnvironment, DeviceAppearance)
+        case triggerICloudSync(SimctlClientEnvironment)
 
         @inlinable var httpMethod: HttpMethod {
             switch self {
@@ -216,7 +227,8 @@ extension SimctlClient {
             case .setPrivacy,
                  .renameDevice,
                  .terminateApp,
-                 .setDeviceAppearance:
+                 .setDeviceAppearance,
+                 .triggerICloudSync:
                 return .get
             }
         }
@@ -237,6 +249,9 @@ extension SimctlClient {
 
             case .setDeviceAppearance:
                 return .deviceAppearance
+
+            case .triggerICloudSync:
+                return .iCloudSync
             }
         }
 
@@ -246,7 +261,8 @@ extension SimctlClient {
                  .setPrivacy,
                  .renameDevice,
                  .terminateApp,
-                 .setDeviceAppearance:
+                 .setDeviceAppearance,
+                 .triggerICloudSync:
                 return nil
             }
         }
@@ -263,7 +279,8 @@ extension SimctlClient {
             }
 
             switch self {
-            case let .postPushNotification(env, _):
+            case let .postPushNotification(env, _),
+                 let .triggerICloudSync(env):
                 return setEnv(env)
 
             case let .setPrivacy(env, action, service):
@@ -299,7 +316,8 @@ extension SimctlClient {
             case .setPrivacy,
                  .renameDevice,
                  .terminateApp,
-                 .setDeviceAppearance:
+                 .setDeviceAppearance,
+                 .triggerICloudSync:
                 return nil
             }
         }
