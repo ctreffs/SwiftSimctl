@@ -78,6 +78,12 @@ public class SimctlCLI {
 
             return self.runCommand(cmd)
         }
+
+        server.onClearStatusBarOverrides { [unowned self] deviceId, _ -> Result<String, Error> in
+            let cmd: ShellOutCommand = .simctlClearStatusBarOverrides(device: deviceId)
+
+            return self.runCommand(cmd)
+        }
     }
 
     deinit {
