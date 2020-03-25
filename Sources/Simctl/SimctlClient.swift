@@ -55,8 +55,16 @@ public class SimctlClient {
     ///   - action: The privacy action to be taken
     ///   - service: The service to be addressed.
     ///   - completion: Result callback of the call. Use this to wait for an expectation to fulfill in a test case.
-    public func requestPrivacyChange(action: PrivacyAction, service: PrivacyService, _ completion: @escaping DataTaskCallback) {
+    public func setPrivacy(action: PrivacyAction, service: PrivacyService, _ completion: @escaping DataTaskCallback) {
         dataTask(.setPrivacy(env, action, service), completion)
+    }
+
+    /// Rename the current device to given name.
+    /// - Parameters:
+    ///   - newName: The new name of the device.
+    ///   - completion: Result callback of the call. Use this to wait for an expectation to fulfill in a test case.
+    public func renameDevice(to newName: String, _ completion: @escaping DataTaskCallback) {
+        dataTask(.renameDevice(env, newName), completion)
     }
 }
 
@@ -184,30 +192,37 @@ extension SimctlClient {
     public enum Route {
         case postPushNotification(SimctlClientEnvironment, PushNotificationContent)
         case setPrivacy(SimctlClientEnvironment, PrivacyAction, PrivacyService)
+        case renameDevice(SimctlClientEnvironment, String)
 
         @inlinable var httpMethod: HttpMethod {
             switch self {
             case .postPushNotification:
                 return .post
 
-            case .setPrivacy:
+            case .setPrivacy,
+                 .renameDevice:
                 return .get
             }
         }
 
-        @inlinable var path: String {
+        @inlinable var path: ServerPath {
             switch self {
             case .postPushNotification:
-                return "/simctl/pushNotification"
+                return .pushNotification
+
             case .setPrivacy:
-                return "/simctl/privacy"
+                return .privacy
+
+            case .renameDevice:
+                return .renameDevice
             }
         }
 
         @inlinable var queryItems: [URLQueryItem]? {
             switch self {
             case .postPushNotification,
-                 .setPrivacy:
+                 .setPrivacy,
+                 .renameDevice:
                 return nil
             }
         }
@@ -233,6 +248,11 @@ extension SimctlClient {
                 fields.append(HeaderField(.privacyAction, action.rawValue))
                 fields.append(HeaderField(.privacyService, service.rawValue))
                 return fields
+
+            case let .renameDevice(env, name):
+                var fields = setEnv(env)
+                fields.append(HeaderField(.deviceName, name))
+                return fields
             }
         }
 
@@ -242,13 +262,14 @@ extension SimctlClient {
             case let .postPushNotification(_, notification):
                 return try? encoder.encode(notification)
 
-            case .setPrivacy:
+            case .setPrivacy,
+                 .renameDevice:
                 return nil
             }
         }
 
         func asURL() -> URL {
-            let urlString: String = SimctlClient.host.host + path
+            let urlString: String = SimctlClient.host.host + path.rawValue
             guard var components = URLComponents(string: urlString) else {
                 fatalError("no valid url \(urlString)")
             }
@@ -263,13 +284,6 @@ extension SimctlClient {
 
             request.httpMethod = httpMethod.rawValue
 
-            // let defaultHeaderFields: [HeaderField] = [
-            //     // 'Authorization: OAuth [your access token]'
-            //     .init("Authorization", "OAuth " + developerAccessToken)
-            // ]
-            //
-            // let allHeaderFields: [HeaderField] = headerFields + defaultHeaderFields
-            //
             for field in headerFields {
                 request.addValue(field.value, forHTTPHeaderField: field.headerField.rawValue)
             }

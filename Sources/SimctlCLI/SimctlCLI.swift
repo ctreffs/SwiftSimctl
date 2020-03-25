@@ -23,7 +23,7 @@ public class SimctlCLI {
     static let instance = SimctlCLI()
 
     public init() {
-        log = Logger(label: "com.simctl.cli")
+        log = Logger(label: "com.ctreffs.simctlcli")
         server = SimctlServer()
 
         server.onPushNotification { [unowned self] deviceId, bundleId, pushContent -> Result<String, Error> in
@@ -39,6 +39,12 @@ public class SimctlCLI {
                                                       permissionsFor: service,
                                                       on: deviceId,
                                                       bundleIdentifier: bundleId)
+
+            return self.runCommand(cmd)
+        }
+
+        server.onRename { [unowned self] deviceId, _, newName -> Result<String, Error> in
+            let cmd: ShellOutCommand = .simctlRename(device: deviceId, to: newName)
 
             return self.runCommand(cmd)
         }

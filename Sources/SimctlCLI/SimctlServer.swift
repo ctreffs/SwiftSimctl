@@ -103,4 +103,32 @@ final class SimctlServer {
             }
         }
     }
+
+    /// Callback to be exectured on rename device request.
+    /// - Parameter closure: The closure to be executed.
+    func onRename(_ closure: @escaping (UUID, String?, String) -> Result<String, Swift.Error>) {
+        server.GET[ServerPath.renameDevice.rawValue] = { request in
+            guard let deviceId = request.headerValue(for: .deviceUdid, UUID.init) else {
+                return .badRequest(.text("Device Udid missing or corrupt."))
+            }
+
+            guard let bundleId = request.headerValue(for: .bundleIdentifier) else {
+                return .badRequest(.text("Bundle Id missing or corrupt."))
+            }
+
+            guard let deviceName: String = request.headerValue(for: .deviceName) else {
+                return .badRequest(.text("No device name parameter provided."))
+            }
+
+            let result = closure(deviceId, bundleId, deviceName)
+
+            switch result {
+            case let .success(output):
+                return .ok(.text(output))
+
+            case let .failure(error):
+                return .badRequest(.text(error.localizedDescription))
+            }
+        }
+    }
 }

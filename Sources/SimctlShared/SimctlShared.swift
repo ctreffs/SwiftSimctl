@@ -65,11 +65,13 @@ public enum HeaderFieldKey: String {
     case deviceUdid = "deviceudid"
     case privacyAction = "privacyaction"
     case privacyService = "privacyservice"
+    case deviceName = "devicename"
 }
 
 public enum ServerPath: String {
     case pushNotification = "/simctl/pushNotification"
     case privacy = "/simctl/privacy"
+    case renameDevice = "/simctl/renameDevice"
 }
 
 /// Some permission changes will terminate the application if running.

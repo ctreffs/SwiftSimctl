@@ -9,8 +9,6 @@ import Foundation
 import ShellOut
 import SimctlShared
 
-// https://medium.com/@ankitkumargupta/ios-simulator-command-line-tricks-ee58054d30f4
-
 extension ShellOutCommand {
     static func openSimulator() -> ShellOutCommand {
         .init(string: "open -b com.apple.iphonesimulator")
@@ -71,9 +69,19 @@ extension ShellOutCommand {
     }
 
     ///  simctl privacy <device> <action> <service> [<bundle identifier>]
-
     static func simctlPrivacy(_ action: PrivacyAction, permissionsFor service: PrivacyService, on device: UUID, bundleIdentifier: String?) -> ShellOutCommand {
         .init(string: simctl("privacy \(device.uuidString) \(action.rawValue) \(service.rawValue) \(bundleIdentifier ?? "")"))
+    }
+
+    /// Rename a device.
+    ///
+    /// Usage: simctl rename <device> <name>
+    ///
+    /// - Parameters:
+    ///   - device: The device Udid
+    ///   - name: The new name
+    static func simctlRename(device: UUID, to name: String) -> ShellOutCommand {
+        .init(string: simctl("rename \(device.uuidString) \(name)"))
     }
 }
 
