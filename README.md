@@ -27,6 +27,13 @@ To enable calling these commands `Simctl` communicates over a local network conn
 
 `SimctlCLI` is a small command line tool that starts a local server, listens to requrests from `Simctl` (the client library) and executes `xcrun simctl` commands.
 
+### ⌨ Available Commands
+
+- Send push notifications with custom payload
+- Grant or revoke privacy permissions
+- Rename device
+- Terminate app by bundle id
+
 ## ❔ Why would you (not) use this
 
 #### ➕ Pro
