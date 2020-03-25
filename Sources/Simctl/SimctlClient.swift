@@ -44,8 +44,8 @@ public class SimctlClient {
     /// - Parameters:
     ///   - notification: The notifcation payload to be send.
     ///   - completion: Result callback of the call. Use this to wait for an expectation to fulfill in a test case.
-    public func requestPushNotification(_ notification: PushNotificationContent, _ completion: @escaping DataTaskCallback) {
-        dataTask(.postPushNotification(env, notification)) { result in
+    public func sendPushNotification(_ notification: PushNotificationContent, _ completion: @escaping DataTaskCallback) {
+        dataTask(.sendPushNotification(env, notification)) { result in
             completion(result)
         }
     }
@@ -212,7 +212,7 @@ extension SimctlClient {
 // MARK: - Routing
 extension SimctlClient {
     public enum Route {
-        case postPushNotification(SimctlClientEnvironment, PushNotificationContent)
+        case sendPushNotification(SimctlClientEnvironment, PushNotificationContent)
         case setPrivacy(SimctlClientEnvironment, PrivacyAction, PrivacyService)
         case renameDevice(SimctlClientEnvironment, String)
         case terminateApp(SimctlClientEnvironment, String)
@@ -221,7 +221,7 @@ extension SimctlClient {
 
         @inlinable var httpMethod: HttpMethod {
             switch self {
-            case .postPushNotification:
+            case .sendPushNotification:
                 return .post
 
             case .setPrivacy,
@@ -235,7 +235,7 @@ extension SimctlClient {
 
         @inlinable var path: ServerPath {
             switch self {
-            case .postPushNotification:
+            case .sendPushNotification:
                 return .pushNotification
 
             case .setPrivacy:
@@ -257,7 +257,7 @@ extension SimctlClient {
 
         @inlinable var queryItems: [URLQueryItem]? {
             switch self {
-            case .postPushNotification,
+            case .sendPushNotification,
                  .setPrivacy,
                  .renameDevice,
                  .terminateApp,
@@ -279,7 +279,7 @@ extension SimctlClient {
             }
 
             switch self {
-            case let .postPushNotification(env, _),
+            case let .sendPushNotification(env, _),
                  let .triggerICloudSync(env):
                 return setEnv(env)
 
@@ -310,7 +310,7 @@ extension SimctlClient {
         @inlinable var httpBody: Data? {
             let encoder = JSONEncoder()
             switch self {
-            case let .postPushNotification(_, notification):
+            case let .sendPushNotification(_, notification):
                 return try? encoder.encode(notification)
 
             case .setPrivacy,
