@@ -288,7 +288,7 @@ extension SimctlClient {
                 return .statusBarOverrides
 
             case .clearStatusBarOverrides:
-                return .statusBarOverridesClear
+                return .statusBarOverrides
             }
         }
 

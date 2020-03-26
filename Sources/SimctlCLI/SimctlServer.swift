@@ -271,7 +271,7 @@ final class SimctlServer {
     /// Callback to be executed on clear status bar override request.
     /// - Parameter closure: The closure to be executed.
     func onClearStatusBarOverrides(_ closure: @escaping (UUID, String?) -> Result<String, Swift.Error>) {
-        server.GET[ServerPath.statusBarOverridesClear.rawValue] = { request in
+        server.GET[ServerPath.statusBarOverrides.rawValue] = { request in
             guard let deviceId = request.headerValue(for: .deviceUdid, UUID.init) else {
                 return .badRequest(.text("Device Udid missing or corrupt."))
             }
