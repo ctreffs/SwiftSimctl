@@ -284,9 +284,11 @@ extension SimctlClient {
             case .uninstallApp:
                 return .uninstallApp
 
-            case .setStatusBarOverrides,
-                 .clearStatusBarOverrides:
+            case .setStatusBarOverrides:
                 return .statusBarOverrides
+
+            case .clearStatusBarOverrides:
+                return .statusBarOverridesClear
             }
         }
 
