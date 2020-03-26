@@ -120,7 +120,7 @@ extension ShellOutCommand {
     /// Usage: simctl status_bar <device> clear
     /// - Parameter device: The device Udid
     static func simctlClearStatusBarOverrides(device: UUID) -> ShellOutCommand {
-        .init(string: "status_bar \(device.uuidString) clear")
+        .init(string: simctl("status_bar \(device.uuidString) clear"))
     }
 
     /// Set status bar overrides
