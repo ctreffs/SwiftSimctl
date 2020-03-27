@@ -107,7 +107,7 @@ public enum PrivacyService: String {
     /// Allow access to location services when app is in use.
     case location
     /// Allow access to location services at all times.
-    case locationAllways = "location-always"
+    case locationAlways = "location-always"
     /// Allow adding photos to the photo library.
     case photosAdd = " photos-add"
     /// Allow full access to the photo library.
