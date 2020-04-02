@@ -18,8 +18,8 @@ Pod::Spec.new do |spec|
   spec.requires_arc = true
   spec.exclude_files = '.swift-version'
   spec.source_files  = 'Sources/Simctl/**/*.swift'
-  spec.dependency 'Swifter', '~> 1.4.7'
   spec.dependency 'SimctlShared', '~> 0.1.0'
+  spec.dependency 'Swifter', '~> 1.4.7'
   spec.ios.framework = 'UIKit'
   spec.ios.deployment_target = '11.0'
 end
