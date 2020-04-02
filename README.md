@@ -1,5 +1,6 @@
 # Swift Simctl
 
+[![build](https://github.com/ctreffs/SwiftSimctl/workflows/Swift-macOS/badge.svg)](actions)
 [![license](https://img.shields.io/badge/license-MIT-brightgreen.svg)](LICENSE)
 [![swift version](https://img.shields.io/badge/swift-5.2-brightgreen.svg)](https://swift.org/download)
 [![platforms](https://img.shields.io/badge/platforms-%20macOS%20|%20iOS%20|%20tvOS-brightgreen.svg)](#)
