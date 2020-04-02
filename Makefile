@@ -75,9 +75,6 @@ cleanArtifacts:
 testReadme:
 	markdown-link-check -p -v ./README.md
 
-podSpecCreate:
-	bundle exec pod spec create https://github.com/ctreffs/SwiftSimctl.git
-
 podSpecLint:
 	bundle exec pod spec lint
 
