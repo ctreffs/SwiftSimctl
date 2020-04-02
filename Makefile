@@ -79,3 +79,6 @@ podSpecCreate:
 
 podSpecLint:
 	bundle exec pod spec lint
+
+podLibLint:
+	bundle exec pod lib lint
