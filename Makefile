@@ -79,4 +79,6 @@ podSpecLint:
 	bundle exec pod spec lint
 
 podLibLint:
-	bundle exec pod lib lint
+	bundle exec pod lib lint SimctlShared.podspec
+	bundle exec pod lib lint Simctl.podspec --include-podspecs=SimctlShared.podspec
+	bundle exec pod lib lint SimctlCLI.podspec --include-podspecs=SimctlShared.podspec
