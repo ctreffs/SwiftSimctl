@@ -25,7 +25,7 @@ jobs:
         restore-keys: |
           ${{ runner.os }}-bundler-
     - name: bundle install
-      run: bundle install --deployment
+      run: bundle install
 
     - name: pod lib lint
-      run: bundle exec pod lib lint
+      run: make podLibLint
