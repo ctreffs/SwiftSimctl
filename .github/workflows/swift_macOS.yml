@@ -15,5 +15,27 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2
-    - name: Build
+    - name: Swift build
       run: swift build -v
+
+pod_lib_lint:
+    name: pod lib lint
+    runs-on: macos-latest
+    env: 
+      DEVELOPER_DIR: /Applications/Xcode_11.4.app/Contents/Developer
+
+    steps:
+    - uses: actions/checkout@v1
+
+    - name: Cache Bundler
+      uses: actions/cache@v1
+      with:
+        path: vendor/bundle
+        key: ${{ runner.os }}-bundler-${{ hashFiles('**/Gemfile.lock') }}
+        restore-keys: |
+          ${{ runner.os }}-bundler-
+    - name: bundle install
+      run: bundle install --deployment
+
+    - name: pod lib lint
+      run: bundle exec pod lib lint
