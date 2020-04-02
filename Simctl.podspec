@@ -17,7 +17,11 @@ Pod::Spec.new do |spec|
   spec.swift_version = '5.2'
   spec.requires_arc = true
   spec.exclude_files = '.swift-version'
-  spec.source_files  = 'Sources/Simctl/**/*.swift'
+  spec.preserve_paths = 'bin/*'
+  spec.resource_bundles = {
+    'SimctlCLI' => ['bin/SimctlCLI']
+  }
+  spec.source_files = 'Sources/Simctl/**/*.swift'
   spec.ios.dependency 'SimctlShared', '~> 0.1.0'
   spec.ios.dependency 'Swifter', '~> 1.4.7'
   spec.ios.framework = 'UIKit'
