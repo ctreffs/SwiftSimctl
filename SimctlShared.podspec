@@ -1,0 +1,24 @@
+# frozen_string_literal: true
+
+Pod::Spec.new do |spec|
+  spec.name = 'SimctlShared'
+  spec.version = '0.1.0'
+  spec.summary = 'Swift client-server tool to call xcrun simctl from your simulator. Automate push notification testing!'
+  spec.description = <<-DESC
+   This is a small tool (SimctlCLI) and library (Simctl), written in Swift, to automate xcrun simctl commands for Simulator in unit and UI tests.
+   It enables, among other things, reliable fully automated testing of Push Notifications with dynamic content, and driven by a UI Test you control.
+  DESC
+  spec.homepage = 'https://github.com/ctreffs/SwiftSimctl'
+  spec.screenshots = 'https://raw.githubusercontent.com/ctreffs/SwiftSimctl/master/docs/SimctlExample.gif'
+  spec.author = { 'Christian Treffs' => 'ctreffs@gmail.com' }
+  spec.social_media_url = 'https://twitter.com/chrisdailygrind'
+  spec.license = { type: 'MIT', file: 'LICENSE' }
+  spec.source = { git: 'https://github.com/ctreffs/SwiftSimctl.git', tag: spec.version.to_s }
+  spec.swift_version = '5.2'
+  spec.requires_arc = true
+  spec.exclude_files = '.swift-version'
+  spec.source_files  = 'Sources/SimctlShared/**/*.swift'
+  spec.framework = 'Foundation'
+  spec.ios.deployment_target = '11.0'
+  spec.osx.deployment_target = '10.12'
+end

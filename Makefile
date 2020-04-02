@@ -5,9 +5,10 @@ SIMCTLCLI_NAME = SimctlCLI
 
 # Build SimctlCLI release
 buildSimctlCLI:
-	@echo "Building..."
+	@printf "Building..."
 	@swift build -Xswiftc -Osize -Xswiftc -whole-module-optimization -c release --product $(SIMCTLCLI_NAME) 
-	@echo "Done - $(SIMCTLCLI_NAME) executable at `swift build -c release --product $(SIMCTLCLI_NAME) --show-bin-path`/$(SIMCTLCLI_NAME)"
+	@cp "`swift build -c release --product $(SIMCTLCLI_NAME) --show-bin-path`/$(SIMCTLCLI_NAME)" ./bin
+	@echo "Done"
 
 cleanBuildSimctlCLI: cleanArtifacts buildSimctlCLI
 
@@ -73,3 +74,11 @@ cleanArtifacts:
 # requires <https://github.com/tcort/markdown-link-check>
 testReadme:
 	markdown-link-check -p -v ./README.md
+
+podSpecLint:
+	bundle exec pod spec lint
+
+podLibLint:
+	bundle exec pod lib lint SimctlShared.podspec --platforms=ios,macos
+	bundle exec pod lib lint Simctl.podspec --include-podspecs=SimctlShared.podspec --platforms=ios
+	bundle exec pod lib lint SimctlCLI.podspec --include-podspecs=SimctlShared.podspec --platforms=macos

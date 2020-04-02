@@ -5,9 +5,7 @@
 //  Created by Christian Treffs on 18.03.20.
 //
 
-import ArgumentParser
 import Foundation
-import Logging
 import ShellOut
 import SimctlShared
 import Swifter
@@ -18,78 +16,19 @@ import Swifter
 ///
 public class SimctlCLI {
     let server: SimctlServer
-    let log: Logger
-
+    
     static let instance = SimctlCLI()
-
+    
     public init() {
-        log = Logger(label: "com.ctreffs.simctlcli")
         server = SimctlServer()
-
-        server.onPushNotification { [unowned self] deviceId, bundleId, pushContent -> Result<String, Error> in
-            let cmd: ShellOutCommand = .simctlPush(to: deviceId,
-                                                   pushContent: pushContent,
-                                                   bundleIdentifier: bundleId)
-
-            return self.runCommand(cmd)
-        }
-
-        server.onPrivacy { [unowned self] deviceId, bundleId, action, service -> Result<String, Error> in
-            let cmd: ShellOutCommand = .simctlPrivacy(action,
-                                                      permissionsFor: service,
-                                                      on: deviceId,
-                                                      bundleIdentifier: bundleId)
-
-            return self.runCommand(cmd)
-        }
-
-        server.onRename { [unowned self] deviceId, _, newName -> Result<String, Error> in
-            let cmd: ShellOutCommand = .simctlRename(device: deviceId, to: newName)
-
-            return self.runCommand(cmd)
-        }
-
-        server.onTerminateApp { [unowned self] deviceId, _, appBundleId -> Result<String, Error> in
-            let cmd: ShellOutCommand = .simctlTerminateApp(device: deviceId, appBundleIdentifier: appBundleId)
-
-            return self.runCommand(cmd)
-        }
-
-        server.onSetDeviceAppearance {[unowned self] deviceId, _, appearance -> Result<String, Error> in
-            let cmd: ShellOutCommand = .simctlSetUI(appearance: appearance, on: deviceId)
-
-            return self.runCommand(cmd)
-        }
-
-        server.onTriggerICloudSync { [unowned self] deviceId, _ -> Result<String, Error> in
-            let cmd: ShellOutCommand = .simctlTriggerICloudSync(device: deviceId)
-
-            return self.runCommand(cmd)
-        }
-
-        server.onUninstallApp { [unowned self] deviceId, _, appBundleId -> Result<String, Error> in
-            let cmd: ShellOutCommand = .simctlUninstallApp(device: deviceId, appBundleIdentifier: appBundleId)
-            return self.runCommand(cmd)
-        }
-
-        server.onSetStatusBarOverride { [unowned self] deviceId, _, overrides -> Result<String, Error> in
-            let cmd: ShellOutCommand = .simctlSetStatusBarOverrides(device: deviceId,
-                                                                    overrides: overrides)
-
-            return self.runCommand(cmd)
-        }
-
-        server.onClearStatusBarOverrides { [unowned self] deviceId, _ -> Result<String, Error> in
-            let cmd: ShellOutCommand = .simctlClearStatusBarOverrides(device: deviceId)
-
-            return self.runCommand(cmd)
-        }
+        
+        setupServerCallbacks()
     }
-
+    
     deinit {
         server.stop()
     }
-
+    
     func listDevices() -> [SimulatorDevice] {
         do {
             let devicesJSONString = try shellOut(to: .simctlList(.devices, true))
@@ -98,47 +37,134 @@ public class SimctlCLI {
             let listing = try decoder.decode(SimulatorDeviceListing.self, from: devicesData)
             return listing.devices
         } catch {
-            log.error("\(error)")
             return []
         }
     }
-
+    
     func runCommand(_ cmd: ShellOutCommand) -> Result<String, Error> {
         do {
-            log.info("Executing '\(cmd)'")
             let output: String = try shellOut(to: cmd)
             return .success(output)
         } catch {
-            log.error("\(error)")
             return .failure(error)
         }
     }
 }
 
-// MARK: - CLI Commands
-
-struct Simctl: ParsableCommand {
-    static let configuration = CommandConfiguration(
-        commandName: "simctl",
-        abstract: "Run simulator controls easily and trigger remote push notifications from your app.",
-        subcommands: [
-            StartServer.self,
-            ListDevices.self
-        ])
-
-    struct StartServer: ParsableCommand {
-        @Option(default: 8080, help: "The port to run the server on.")
-        var port: SimctlShared.Port
-
-        func run() throws {
-            SimctlCLI.instance.server.startServer(on: port)
+// MARK: - Server callbacks
+extension SimctlCLI {
+    func setupServerCallbacks() {
+        server.onPushNotification { [unowned self] deviceId, bundleId, pushContent -> Result<String, Error> in
+            let cmd: ShellOutCommand = .simctlPush(to: deviceId,
+                                                   pushContent: pushContent,
+                                                   bundleIdentifier: bundleId)
+            
+            return self.runCommand(cmd)
+        }
+        
+        server.onPrivacy { [unowned self] deviceId, bundleId, action, service -> Result<String, Error> in
+            let cmd: ShellOutCommand = .simctlPrivacy(action,
+                                                      permissionsFor: service,
+                                                      on: deviceId,
+                                                      bundleIdentifier: bundleId)
+            
+            return self.runCommand(cmd)
+        }
+        
+        server.onRename { [unowned self] deviceId, _, newName -> Result<String, Error> in
+            let cmd: ShellOutCommand = .simctlRename(device: deviceId, to: newName)
+            
+            return self.runCommand(cmd)
+        }
+        
+        server.onTerminateApp { [unowned self] deviceId, _, appBundleId -> Result<String, Error> in
+            let cmd: ShellOutCommand = .simctlTerminateApp(device: deviceId, appBundleIdentifier: appBundleId)
+            
+            return self.runCommand(cmd)
+        }
+        
+        server.onSetDeviceAppearance {[unowned self] deviceId, _, appearance -> Result<String, Error> in
+            let cmd: ShellOutCommand = .simctlSetUI(appearance: appearance, on: deviceId)
+            
+            return self.runCommand(cmd)
+        }
+        
+        server.onTriggerICloudSync { [unowned self] deviceId, _ -> Result<String, Error> in
+            let cmd: ShellOutCommand = .simctlTriggerICloudSync(device: deviceId)
+            
+            return self.runCommand(cmd)
+        }
+        
+        server.onUninstallApp { [unowned self] deviceId, _, appBundleId -> Result<String, Error> in
+            let cmd: ShellOutCommand = .simctlUninstallApp(device: deviceId, appBundleIdentifier: appBundleId)
+            return self.runCommand(cmd)
+        }
+        
+        server.onSetStatusBarOverride { [unowned self] deviceId, _, overrides -> Result<String, Error> in
+            let cmd: ShellOutCommand = .simctlSetStatusBarOverrides(device: deviceId,
+                                                                    overrides: overrides)
+            
+            return self.runCommand(cmd)
+        }
+        
+        server.onClearStatusBarOverrides { [unowned self] deviceId, _ -> Result<String, Error> in
+            let cmd: ShellOutCommand = .simctlClearStatusBarOverrides(device: deviceId)
+            
+            return self.runCommand(cmd)
         }
     }
+}
 
-    struct ListDevices: ParsableCommand {
-        func run() throws {
+// MARK: - CLI
+extension SimctlCLI {
+    
+    public static func main() {
+        let args = CommandLine.arguments
+        
+        guard args.isEmpty else {
+            showHelp()
+            return
+        }
+        
+        switch args[0] {
+        case "-h", "--help":
+            showHelp()
+        case "start-server":
+            
+            let port: SimctlShared.Port
+            if args.count == 3, args[1] == "--port", let customPort: SimctlShared.Port = Port(args[2]) {
+                port = customPort
+            } else {
+                port = 8080
+            }
+            
+            instance.server.startServer(on: port)
+            
+        case "list-devices":
             let devices = SimctlCLI.instance.listDevices()
             print("\(devices.map { $0.description }.sorted().joined(separator: "\n"))")
+        default:
+            showHelp()
         }
+        
+        
     }
+    
+    static func showHelp() {
+        let help = """
+        SimctlCLI - Run simulator controls easily and trigger remote push notifications
+        from your app.
+        
+        USAGE: simctl <subcommand>
+        
+        OPTIONS:
+        -h, --help              Show help information.
+        
+        SUBCOMMANDS:
+        start-server [--port <port>]
+        list-devices
+        """
+        print(help)
+    }
+    
 }

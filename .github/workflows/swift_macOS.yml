@@ -15,5 +15,12 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2
-    - name: Build
+    
+    - name: Swift build
       run: swift build -v
+    
+    - name: Bundle install
+      run: bundle install
+
+    - name: Pod lib lint
+      run: make podLibLint

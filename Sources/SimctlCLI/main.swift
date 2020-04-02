@@ -1,1 +1,1 @@
-Simctl.main()
+SimctlCLI.main()

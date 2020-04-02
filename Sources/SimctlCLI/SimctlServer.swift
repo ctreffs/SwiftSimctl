@@ -4,10 +4,7 @@
 //
 //  Created by Christian Treffs on 18.03.20.
 //
-
-import ArgumentParser
 import Foundation
-import Logging
 import ShellOut
 import SimctlShared
 import Swifter
@@ -15,11 +12,9 @@ import Swifter
 /// The server used to receive commands from an app and
 /// translate them into commands on the local machine.
 final class SimctlServer {
-    let log: Logger
     let server: HttpServer
 
     init() {
-        self.log = Logger(label: "com.simclt.server")
         server = HttpServer()
     }
 
@@ -28,7 +23,7 @@ final class SimctlServer {
     func startServer(on port: SimctlShared.Port) {
         do {
             try server.start(port)
-            log.info("Server listening on port \(port)...")
+            print("Server listening on port \(port)...")
             RunLoop.main.run()
         } catch {
             fatalError("Unable to start server on port \(port)")
