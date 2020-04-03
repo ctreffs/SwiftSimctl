@@ -30,6 +30,7 @@ extension ShellOutCommand {
             "\(verbose ? "-v" : "")",
             filter.rawValue
         ].joined(separator: " ")
+
         return .init(string: simctl(cmd))
     }
 
@@ -134,7 +135,7 @@ extension ShellOutCommand {
     }
 }
 
-enum ListFilterType: String {
+internal enum ListFilterType: String {
     case devices
     case devicetypes
     case runtimes

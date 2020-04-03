@@ -131,7 +131,7 @@ public enum DeviceAppearance: String {
     case dark
 }
 
-protocol StatusBarOverrideArgument {
+internal protocol StatusBarOverrideArgument {
     var toArgument: String { get }
 }
 
@@ -185,8 +185,8 @@ public struct StatusBarOverride {
 
     public enum DataNetworkType: String, StatusBarOverrideArgument {
         case wifi
-        case _3g = "3g"
-        case _4g = "4g"
+        case thirdGen = "3g"
+        case fourthGen = "4g"
         case lte
         case lteA = "lte-a"
         case ltePlus = "lte+"
