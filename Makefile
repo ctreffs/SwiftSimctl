@@ -82,3 +82,8 @@ podLibLint:
 	bundle exec pod lib lint SimctlShared.podspec --platforms=ios,macos
 	bundle exec pod lib lint Simctl.podspec --include-podspecs=SimctlShared.podspec --platforms=ios
 	bundle exec pod lib lint SimctlCLI.podspec --include-podspecs=SimctlShared.podspec --platforms=macos
+
+podPublish: podLibLint
+	pod setup && pod repo update && pod trunk push SimctlShared.podspec 
+	pod setup && pod repo update && pod trunk push Simctl.podspec 
+	pod setup && pod repo update && pod trunk push SimctlCLI.podspec 
