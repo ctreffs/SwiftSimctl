@@ -6,7 +6,7 @@
 [![platforms](https://img.shields.io/badge/platforms-%20macOS%20|%20iOS%20|%20tvOS-brightgreen.svg)](#)
 
 <p align="center">
-	<img src="docs/SimctlExample.gif" height="300" alt="simctl-example-gif"/>
+	<a href="docs/SimctlExample.gif" target="_blank"><img src="docs/SimctlExample.gif" height="400" alt="simctl-example-gif"/></a>
 </p>   
 
 
@@ -82,7 +82,7 @@ To use Swift Simctl in your Xcode project add the package:
 
 #### Running the server alongside your tests
 
-Ensure that for the duration of your test run `SimctlCLI` runs on your host machine.
+Make sure that for the duration of your test run `SimctlCLI` runs on your host machine.
 To automate that with Xcode itself use the following snippets as pre and post action of your test target.
 
 ###### `Your Scheme` > Test > Pre-Actions > Run Script
@@ -116,10 +116,11 @@ Assuming you have a project with Cocoapods already set up (otherwise refer to [t
 1. Add `pod 'Simctl', '~> 0.2.0'` to your (test) target in your `Podfile`
 2. Run `pod install`
 3. Open `<YourProject>.xcworkspace`
+4. Use `import Simctl` to access the library in your (test) target.
 
 #### Running the server alongside your tests
 
-nsure that for the duration of your test run `SimctlCLI` runs on your host machine.
+Ensure that for the duration of your test run `SimctlCLI` runs on your host machine.
 To automate that with Xcode itself use the following snippets as pre and post action of your test target.
 
 ###### `Your Scheme` > Test > Pre-Actions > Run Script
