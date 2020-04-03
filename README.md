@@ -1,18 +1,18 @@
 # Swift Simctl
 
-[![build](https://github.com/ctreffs/SwiftSimctl/workflows/Swift-macOS/badge.svg)](actions)
-[![license](https://img.shields.io/badge/license-MIT-brightgreen.svg)](LICENSE)
+[![build](https://github.com/ctreffs/SwiftSimctl/workflows/Swift-macOS/badge.svg)](https://github.com/ctreffs/SwiftSimctl/actions)
+[![license](https://img.shields.io/badge/license-MIT-brightgreen.svg)](https://github.com/ctreffs/SwiftSimctl/blob/master/LICENSE)
 [![swift version](https://img.shields.io/badge/swift-5.2-brightgreen.svg)](https://swift.org/download)
 [![platforms](https://img.shields.io/badge/platforms-%20macOS%20|%20iOS%20|%20tvOS-brightgreen.svg)](#)
 
 <p align="center">
-	<img src="docs/SimctlExample.gif" height="300" alt="simctl-example-gif"/>
+	<a href="docs/SimctlExample.gif" target="_blank"><img src="docs/SimctlExample.gif" height="400" alt="simctl-example-gif"/></a>
 </p>   
 
 
 This is a small tool (SimctlCLI) and library (Simctl), written in Swift, to automate [`xcrun simctl`](https://developer.apple.com/library/archive/documentation/IDEs/Conceptual/iOS_Simulator_Guide/InteractingwiththeiOSSimulator/InteractingwiththeiOSSimulator.html#//apple_ref/doc/uid/TP40012848-CH3-SW4) commands for Simulator in unit and UI tests.
 
-It enables, among other things, reliable **fully automated** testing of Push Notifications with dynamic content, and driven by a UI Test you control.
+It enables, among other things, reliable **fully automated** testing of Push Notifications with dynamic content, driven by a UI Test you control.
 
 ### 🚧 Architecture
 
@@ -26,16 +26,16 @@ Swift Simctl is made of two parts. `SimctlCLI` and `Simctl`.
 It provides an interface to commands that are otherwise only available via `xcrun simctl` from within your test code.
 To enable calling these commands `Simctl` communicates over a local network connection to `SimctlCLI`.
 
-`SimctlCLI` is a small command line tool that starts a local server, listens to requrests from `Simctl` (the client library) and executes `xcrun simctl` commands.
+`SimctlCLI` is a small command line tool that starts a local server, listens to requests from `Simctl` (the client library) and executes `xcrun simctl` commands.
 
 ### ⌨ Available Commands
 
 The following commands will be available in code in your (test) targets:
 
 - Send push notifications with custom payload
-- Grant or revoke privacy permissions
+- Grant or revoke privacy permissions (i.e. camera, photos ...)
 - Set the device UI appearance to light or dark mode
-- Set status bar overrides i.e. data network or time
+- Set status bar overrides (i.e. data network, time ...)
 - Uninstall app by bundle id
 - Terminate app by bundle id
 - Rename device
@@ -47,7 +47,7 @@ The following commands will be available in code in your (test) targets:
 
 - Closed system (Mac with Xcode + Simulator)
 - No external dependencies on systems like [APNS](https://developer.apple.com/library/archive/documentation/NetworkingInternet/Conceptual/RemoteNotificationsPG/APNSOverview.html)
-- No custom test code bloating your code base unnecessarily
+- No custom test code bloating your code base (AppDelegate) unnecessarily
 - Push notifications can be simulated properly and the normal app cycle is preserved
 - Runs on CI machines
 - Your app stays a black box and does not need to be modified
@@ -55,9 +55,9 @@ The following commands will be available in code in your (test) targets:
 #### ➖ Contra
 
 - Needs a little configuration in your Xcode project
-- Only available for Xcode 11.4+ and Swift 5.2+
+- Only available for Xcode 11.4+
 
-For specific usage please refer to the example project **<https://github.com/ctreffs/SwiftSimctlExample>**
+For specific usage please refer to the example projects **[Swift Simctl Package Example](https://github.com/ctreffs/SwiftSimctlExample)** or **[Swift Simctl Cocoapod Example](https://github.com/ctreffs/SwiftSimctlExample)**
 
 ## 🚀 Getting Started
 
@@ -66,78 +66,101 @@ These instructions will get your copy of the project up and running on your mach
 ### 📋 Prerequisites
 
 - [Xcode 11.4](https://developer.apple.com/documentation/xcode_release_notes/) and higher.
-- [Swift Package Manager (SPM)](https://github.com/apple/swift-package-manager)
-- [Swiftlint](https://github.com/realm/SwiftLint) for linting - (optional)
-- [SwiftEnv](https://swiftenv.fuller.li/) for Swift version management - (optional)
+- [Swift Package Manager (SPM)](https://github.com/apple/swift-package-manager) or [Cocoapods](https://cocoapods.org)
 
-### 💻 Installing
+### 💻 Usage
 
-#### Using the library
+### 📦 Swift Package
 
-To use Swift Simctl in your code add the package to your project.
+To use Swift Simctl in your Xcode project add the package:
 
-In Xcode:
-
-1. File > Swift Packages > Add Package Dependency...
+1. Xcode > File > Swift Packages > Add Package Dependency...
 2. Choose Package Repository > Search: `SwiftSimctl` or find `https://github.com/ctreffs/SwiftSimctl.git`
-3. Select  `SwiftSimctl` package > `Next`
+3. Select  `SwiftSimctl` package > `Next` ![xcode-swift-package](docs/XcodeSwiftPackage.png)
+4. Do not forget to add the dependency to your (test) target
+5. Use `import Simctl` to access the library in your (test) target.
 
-![xcode-swift-package](docs/XcodeSwiftPackage.png)
+#### Running the server alongside your tests
 
-#### Setting up the server
+Make sure that for the duration of your test run `SimctlCLI` runs on your host machine.
+To automate that with Xcode itself use the following snippets as pre and post action of your test target.
 
-Ensure that for the duration of your test run `SimctlCLI` runs on your host machine.
-
-To automate that with Xcode itself use the following snipets as pre and post action of your test target.
-
-###### Test > Pre-Actions > Run Script
+###### `Your Scheme` > Test > Pre-Actions > Run Script
 
 ```sh
 #!/bin/bash
-
-# cleaning up hanging servers
-killall SimctlCLI 
-
-# fail fast
-set -e
-
+killall SimctlCLI # cleaning up hanging servers
+set -e # fail fast
 # start the server non-blocking from the checked out package
 ${BUILD_ROOT}/../../SourcePackages/checkouts/SwiftSimctl/bin/SimctlCLI start-server > /dev/null 2>&1 &
 ```
 
-###### Test > Post-Actions > Run Script
+###### `Your Scheme` > Test > Post-Actions > Run Script
 
 ```sh
 #!/bin/bash
-
 set -e
-
 killall SimctlCLI
 
 ```
 
-### 📝 Code Example
+###### 📝 Code Example Swift Package
 
-Please refer to the example project for an in depth code example.
+Please refer to the example project for an in depth code example **<https://github.com/ctreffs/SwiftSimctlExample>**
 
-**<https://github.com/ctreffs/SwiftSimctlExample>**
+
+### ☕ Cocoapod
+
+Assuming you have a project with Cocoapods already set up (otherwise refer to [these instructions](https://guides.cocoapods.org/using/using-cocoapods.html)):
+
+1. Add `pod 'Simctl', '~> 0.2.0'` to your (test) target in your `Podfile`
+2. Run `pod install`
+3. Open `<YourProject>.xcworkspace`
+4. Use `import Simctl` to access the library in your (test) target.
+
+#### Running the server alongside your tests
+
+Ensure that for the duration of your test run `SimctlCLI` runs on your host machine.
+To automate that with Xcode itself use the following snippets as pre and post action of your test target.
+
+###### `Your Scheme` > Test > Pre-Actions > Run Script
+
+```sh
+#!/bin/bash
+killall SimctlCLI # cleaning up hanging servers
+set -e # fail fast
+# start the server non-blocking from the checked out pod
+${PODS_ROOT}/Simctl/bin/SimctlCLI start-server > /dev/null 2>&1 &
+
+```
+
+###### `Your Scheme` > Test > Post-Actions > Run Script
+
+```sh
+#!/bin/bash
+set -e
+killall SimctlCLI
+
+```
+
+###### 📝 Code Example Cocoapod
+
+Please refer to the example project for an in depth code example **<https://github.com/ctreffs/SwiftSimctlExamplePod>**
+
 
 ## 🙏 Kudos
 
-`Simctl` would not be possible without these awesome packages:
+Swift Simctl would not be possible without these awesome libraries:
 
 - [ShellOut](https://github.com/JohnSundell/ShellOut) - easy command line invocations
 - [Swifter](https://github.com/httpswift/swifter) - a tiny http server
-- [Swift Log](https://github.com/apple/swift-log) - Apple's logger lib
-- [Swift Argument Parser](https://github.com/apple/swift-argument-parser) - Apple's command line argument parsing lib
-
 
 ## ✍️ Authors
 
 * [Christian Treffs](https://github.com/ctreffs)
 
-See also the list of [contributors](contributors) who participated in this project.
+See also the list of [contributors](https://github.com/ctreffs/SwiftSimctl/graphs/contributors) who participated in this project.
 
 ## 🔏 Licenses
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+This project is licensed under the MIT License - see the [LICENSE](https://github.com/ctreffs/SwiftSimctl/blob/master/LICENSE) file for details.
