@@ -22,6 +22,6 @@ extension HttpRequest {
     }
 
     func headerValue<V>(for key: HeaderFieldKey) -> V? where V: RawRepresentable, V.RawValue == String {
-        headerValue(for: key, { V(rawValue: $0) })
+        headerValue(for: key) { V(rawValue: $0) }
     }
 }

@@ -17,6 +17,8 @@ import AppKit
 #error("Unsupported platform!")
 #endif
 
+// swiftlint:disable file_length
+
 /// SimctlClient provides methods to trigger remote execution of simctl commands from your app on a local machine.
 /// This is acchieved by opening a client-server connection and sending requests to the server
 /// which in turn trigger execution of local commands on the server machine.
@@ -179,7 +181,7 @@ public struct SimulatorEnvironment: SimctlClientEnvironment {
 
 // MARK: - Process Info
 
-enum ProcessEnvironmentKey: String {
+internal enum ProcessEnvironmentKey: String {
     case simulatorAudioDevicesPlistPath = "SIMULATOR_AUDIO_DEVICES_PLIST_PATH"
     case simulatorAudioSettingsPath = "SIMULATOR_AUDIO_SETTINGS_PATH"
     case simulatorBootTime = "SIMULATOR_BOOT_TIME"
@@ -292,21 +294,6 @@ extension SimctlClient {
             }
         }
 
-        @inlinable var queryItems: [URLQueryItem]? {
-            switch self {
-            case .sendPushNotification,
-                 .setPrivacy,
-                 .renameDevice,
-                 .terminateApp,
-                 .setDeviceAppearance,
-                 .triggerICloudSync,
-                 .uninstallApp,
-                 .setStatusBarOverrides,
-                 .clearStatusBarOverrides:
-                return nil
-            }
-        }
-
         @inlinable var headerFields: [HeaderField] {
             func setEnv(_ env: SimctlClientEnvironment) -> [HeaderField] {
                 var fields: [HeaderField] = [
@@ -371,13 +358,11 @@ extension SimctlClient {
 
         func asURL() -> URL {
             let urlString: String = SimctlClient.host.host + path.rawValue
-            guard var components = URLComponents(string: urlString) else {
+            guard let url = URL(string: urlString) else {
                 fatalError("no valid url \(urlString)")
             }
 
-            components.queryItems = self.queryItems
-
-            return components.url!
+            return url
         }
 
         func asURLRequest() -> URLRequest {
@@ -451,7 +436,7 @@ extension SimctlClient {
 
 // MARK: - HTTP Methods
 @usableFromInline
-enum HttpMethod: String {
+internal enum HttpMethod: String {
     case get = "GET"
     case post = "POST"
     case put = "PUT"
@@ -459,8 +444,7 @@ enum HttpMethod: String {
 extension HttpMethod: Equatable { }
 
 // MARK: - Header field
-@usableFromInline
-struct HeaderField {
+public struct HeaderField {
     let headerField: HeaderFieldKey
     let value: String
 
@@ -484,4 +468,5 @@ struct HeaderField {
         self.value = uuid.uuidString
     }
 }
+
 extension HeaderField: Equatable { }

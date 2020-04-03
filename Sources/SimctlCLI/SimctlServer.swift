@@ -11,7 +11,7 @@ import Swifter
 
 /// The server used to receive commands from an app and
 /// translate them into commands on the local machine.
-final class SimctlServer {
+internal final class SimctlServer {
     let server: HttpServer
 
     init() {
