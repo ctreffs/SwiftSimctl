@@ -57,7 +57,7 @@ The following commands will be available in code in your (test) targets:
 - Needs a little configuration in your Xcode project
 - Only available for Xcode 11.4+
 
-For specific usage please refer to the example projects **[Swift Simctl Package Example](https://github.com/ctreffs/SwiftSimctlExample)** or **[Swift Simctl Cocoapod Example](https://github.com/ctreffs/SwiftSimctlExample)**
+For specific usage please refer to the example projects **[Swift Simctl Package Example](https://github.com/ctreffs/SwiftSimctlExample)** or **[Swift Simctl Cocoapod Example](https://github.com/ctreffs/SwiftSimctlExamplePod)**
 
 ## 🚀 Getting Started
 
