@@ -1,9 +1,9 @@
 # Swift Simctl
 
 [![build](https://github.com/ctreffs/SwiftSimctl/workflows/Swift-macOS/badge.svg)](https://github.com/ctreffs/SwiftSimctl/actions)
-[![license](https://img.shields.io/badge/license-MIT-brightgreen.svg)](https://github.com/ctreffs/SwiftSimctl/blob/master/LICENSE)
-[![swift version](https://img.shields.io/badge/swift-5.2-brightgreen.svg)](https://swift.org/download)
-[![platforms](https://img.shields.io/badge/platforms-%20macOS%20|%20iOS%20|%20tvOS-brightgreen.svg)](#)
+[![license](https://img.shields.io/badge/license-MIT-brightgreen.svg)](https://github.com/ctreffs/SwiftSimctl/blob/master/LICENSE)   
+[![swift-version-compatibility](https://img.shields.io/endpoint?url=https%3A%2F%2Fswiftpackageindex.com%2Fapi%2Fpackages%2Fctreffs%2FSwiftSimctl%2Fbadge%3Ftype%3Dswift-versions)](https://swiftpackageindex.com/ctreffs/SwiftSimctl)
+[![platform-compatibility](https://img.shields.io/endpoint?url=https%3A%2F%2Fswiftpackageindex.com%2Fapi%2Fpackages%2Fctreffs%2FSwiftSimctl%2Fbadge%3Ftype%3Dplatforms)](https://swiftpackageindex.com/ctreffs/SwiftSimctl)
 
 <p align="center">
 	<a href="docs/SimctlExample.gif" target="_blank"><img src="docs/SimctlExample.gif" height="400" alt="simctl-example-gif"/></a>
