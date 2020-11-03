@@ -24,7 +24,7 @@ Pod::Spec.new do |spec|
   spec.source_files = 'Sources/SimctlCLI/**/*.swift'
   spec.osx.dependency 'SimctlShared', '~> 0.2.0'
   spec.osx.dependency 'ShellOut', '~> 2.0.0'
-  spec.osx.dependency 'Swifter', '~> 1.4.7'
+  spec.osx.dependency 'Swifter', '~> 1.5'
   spec.osx.deployment_target = '10.12'
   spec.osx.framework = 'AppKit'
 end
