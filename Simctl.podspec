@@ -2,7 +2,7 @@
 
 Pod::Spec.new do |spec|
   spec.name = 'Simctl'
-  spec.version = '0.2.0'
+  spec.version = '0.2.1'
   spec.summary = 'Swift client-server tool to call xcrun simctl from your simulator. Automate push notification testing!'
   spec.description = <<-DESC
    This is a small tool (SimctlCLI) and library (Simctl), written in Swift, to automate xcrun simctl commands for Simulator in unit and UI tests.
@@ -22,7 +22,7 @@ Pod::Spec.new do |spec|
     'SimctlCLI' => ['bin/SimctlCLI']
   }
   spec.source_files = 'Sources/Simctl/**/*.swift'
-  spec.ios.dependency 'SimctlShared', '~> 0.2.0'
+  spec.ios.dependency 'SimctlShared', '~> 0.2.1'
   spec.ios.dependency 'Swifter', '~> 1.5'
   spec.ios.framework = 'UIKit'
   spec.ios.deployment_target = '11.0'

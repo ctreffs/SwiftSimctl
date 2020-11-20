@@ -1,6 +1,6 @@
 # Swift Simctl
 
-[![build](https://github.com/ctreffs/SwiftSimctl/workflows/Swift-macOS/badge.svg)](https://github.com/ctreffs/SwiftSimctl/actions)
+![CI](https://github.com/ctreffs/SwiftSimctl/workflows/CI/badge.svg)
 [![license](https://img.shields.io/badge/license-MIT-brightgreen.svg)](https://github.com/ctreffs/SwiftSimctl/blob/master/LICENSE)   
 [![swift-version-compatibility](https://img.shields.io/endpoint?url=https%3A%2F%2Fswiftpackageindex.com%2Fapi%2Fpackages%2Fctreffs%2FSwiftSimctl%2Fbadge%3Ftype%3Dswift-versions)](https://swiftpackageindex.com/ctreffs/SwiftSimctl)
 [![platform-compatibility](https://img.shields.io/endpoint?url=https%3A%2F%2Fswiftpackageindex.com%2Fapi%2Fpackages%2Fctreffs%2FSwiftSimctl%2Fbadge%3Ftype%3Dplatforms)](https://swiftpackageindex.com/ctreffs/SwiftSimctl)
@@ -113,7 +113,7 @@ Please refer to the example project for an in depth code example **<https://gith
 
 Assuming you have a project with Cocoapods already set up (otherwise refer to [these instructions](https://guides.cocoapods.org/using/using-cocoapods.html)):
 
-1. Add `pod 'Simctl', '~> 0.2.0'` to your (test) target in your `Podfile`
+1. Add `pod 'Simctl', '~> 0.2.1'` to your (test) target in your `Podfile`
 2. Run `pod install`
 3. Open `<YourProject>.xcworkspace`
 4. Use `import Simctl` to access the library in your (test) target.

@@ -14,7 +14,7 @@ let package = Package(
     ],
     dependencies: [
         .package(name: "ShellOut", url: "https://github.com/JohnSundell/ShellOut.git", from: "2.3.0"),
-        .package(name: "Swifter",  url: "https://github.com/httpswift/swifter.git", from: "1.4.7")
+        .package(name: "Swifter",  url: "https://github.com/httpswift/swifter.git", from: "1.5.0")
     ],
     targets: [
         .target(name: "SimctlShared"),
