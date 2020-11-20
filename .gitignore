@@ -8,7 +8,6 @@
 *.moved-aside
 *.pbxuser
 *.perspectivev3
-*.resolved
 *.xccheckout
 *.xcodeproj/*
 *.xcscmblueprint
