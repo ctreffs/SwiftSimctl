@@ -148,6 +148,14 @@ killall SimctlCLI
 Please refer to the example project for an in depth code example **<https://github.com/ctreffs/SwiftSimctlExamplePod>**
 
 
+##### 💭 Port and settings
+
+The default port used by the server is `8080`.  
+If you need to use another port you need to provide it via the `--port` flag when calling `SimctlCLI` and adjust 
+the client port accordingly when setting up your test in code.  
+Use `SimctlCLI --help` to get help regarding this and other server configuration settings.
+
+
 ## 🙏 Kudos
 
 Swift Simctl would not be possible without these awesome libraries:
