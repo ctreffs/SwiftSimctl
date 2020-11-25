@@ -24,6 +24,9 @@ import AppKit
 /// which in turn trigger execution of local commands on the server machine.
 public class SimctlClient {
     /// Address and port to the host machine.
+    /// 
+    /// Note: if you like to use another port here, you need to provide it 
+    /// when starting up the server via the `--port` flag.
     static var host: Host = .localhost(port: 8080)
 
     let session: URLSession
