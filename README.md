@@ -57,7 +57,7 @@ The following commands will be available in code in your (test) targets:
 - Needs a little configuration in your Xcode project
 - Only available for Xcode 11.4+
 
-For specific usage please refer to the example projects **[Swift Simctl Package Example](https://github.com/ctreffs/SwiftSimctlExample)** or **[Swift Simctl Cocoapod Example](https://github.com/ctreffs/SwiftSimctlExamplePod)**
+For specific usage please refer to the example projects **[Swift Simctl Package Example](https://github.com/ctreffs/SwiftSimctlExample)**
 
 ## 🚀 Getting Started
 
@@ -66,7 +66,7 @@ These instructions will get your copy of the project up and running on your mach
 ### 📋 Prerequisites
 
 - [Xcode 11.4](https://developer.apple.com/documentation/xcode_release_notes/) and higher.
-- [Swift Package Manager (SPM)](https://github.com/apple/swift-package-manager) or [Cocoapods](https://cocoapods.org)
+- [Swift Package Manager (SPM)](https://github.com/apple/swift-package-manager)
 
 ### 💻 Usage
 
@@ -107,46 +107,6 @@ killall SimctlCLI
 ###### 📝 Code Example Swift Package
 
 Please refer to the example project for an in depth code example **<https://github.com/ctreffs/SwiftSimctlExample>**
-
-
-### ☕ Cocoapod
-
-Assuming you have a project with Cocoapods already set up (otherwise refer to [these instructions](https://guides.cocoapods.org/using/using-cocoapods.html)):
-
-1. Add `pod 'Simctl', '~> 0.2.1'` to your (test) target in your `Podfile`
-2. Run `pod install`
-3. Open `<YourProject>.xcworkspace`
-4. Use `import Simctl` to access the library in your (test) target.
-
-#### Running the server alongside your tests
-
-Ensure that for the duration of your test run `SimctlCLI` runs on your host machine.
-To automate that with Xcode itself use the following snippets as pre and post action of your test target.
-
-###### `Your Scheme` > Test > Pre-Actions > Run Script
-
-```sh
-#!/bin/bash
-killall SimctlCLI # cleaning up hanging servers
-set -e # fail fast
-# start the server non-blocking from the checked out pod
-${PODS_ROOT}/Simctl/bin/SimctlCLI start-server > /dev/null 2>&1 &
-
-```
-
-###### `Your Scheme` > Test > Post-Actions > Run Script
-
-```sh
-#!/bin/bash
-set -e
-killall SimctlCLI
-
-```
-
-###### 📝 Code Example Cocoapod
-
-Please refer to the example project for an in depth code example **<https://github.com/ctreffs/SwiftSimctlExamplePod>**
-
 
 ##### 💭 Port and settings
 
