@@ -3,9 +3,12 @@ UNAME_S := $(shell uname -s)
 BINDIR_PREFIX?=/usr/local
 SIMCTLCLI_NAME = SimctlCLI
 
+buildRelease:
+	swift build -c release
+
 # Build SimctlCLI release
 buildSimctlCLI:
-	@printf "Building..."
+	@printf "Building SimctlCLI..."
 	@swift build -Xswiftc -Osize -Xswiftc -whole-module-optimization -c release --product $(SIMCTLCLI_NAME) 
 	@cp "`swift build -c release --product $(SIMCTLCLI_NAME) --show-bin-path`/$(SIMCTLCLI_NAME)" ./bin
 	@echo "Done"
