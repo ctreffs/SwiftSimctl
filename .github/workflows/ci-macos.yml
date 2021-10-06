@@ -24,7 +24,12 @@ jobs:
         run: make buildRelease
         env:
           DEVELOPER_DIR: /Applications/Xcode_${{ matrix.xcode }}.app/Contents/Developer
-      
+
+      - name: Build SimctlCLI Release
+        run: make buildSimctlCLI
+        env:
+          DEVELOPER_DIR: /Applications/Xcode_${{ matrix.xcode }}.app/Contents/Developer
+
       - name: Upload build artifacts on failure
         if: failure()
         uses: actions/upload-artifact@v2.2.3
@@ -38,15 +43,3 @@ jobs:
             .build/**/*.dylib
             .build/**/*.dSYM 
             .build/**/*.json
-
-      - name: Build SimctlCLI Release
-        run: make buildSimctlCLI
-        env:
-          DEVELOPER_DIR: /Applications/Xcode_${{ matrix.xcode }}.app/Contents/Developer
-
-      - name: Pod lib lint
-        run: |
-          bundle install
-          make podLibLint
-        env:
-            DEVELOPER_DIR: /Applications/Xcode_${{ matrix.xcode }}.app/Contents/Developer
