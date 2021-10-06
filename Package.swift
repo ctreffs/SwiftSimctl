@@ -13,7 +13,7 @@ let package = Package(
         .library(name: "Simctl", targets: ["Simctl"])
     ],
     dependencies: [
-        .package(url: "https://github.com/apple/swift-argument-parser", from: "0.3.0"),
+        .package(name: "swift-argument-parser", url: "https://github.com/apple/swift-argument-parser", from: "0.5.0"),
         .package(name: "ShellOut", url: "https://github.com/JohnSundell/ShellOut.git", from: "2.3.0"),
         .package(name: "Swifter",  url: "https://github.com/httpswift/swifter.git", from: "1.5.0")
     ],
