@@ -77,16 +77,3 @@ cleanArtifacts:
 # requires <https://github.com/tcort/markdown-link-check>
 testReadme:
 	markdown-link-check -p -v ./README.md
-
-podSpecLint:
-	bundle exec pod spec lint
-
-podLibLint:
-	bundle exec pod lib lint SimctlShared.podspec --platforms=ios,macos
-	bundle exec pod lib lint Simctl.podspec --include-podspecs=SimctlShared.podspec --platforms=ios
-	bundle exec pod lib lint SimctlCLI.podspec --include-podspecs=SimctlShared.podspec --platforms=macos
-
-podPublish: podLibLint
-	bundle exec pod setup && bundle exec pod repo update && bundle exec pod trunk push SimctlShared.podspec 
-	bundle exec pod setup && bundle exec pod repo update && bundle exec pod trunk push Simctl.podspec 
-	bundle exec pod setup && bundle exec pod repo update && bundle exec pod trunk push SimctlCLI.podspec 
