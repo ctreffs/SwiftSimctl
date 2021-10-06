@@ -163,11 +163,16 @@ Swift Simctl would not be possible without these awesome libraries:
 - [ShellOut](https://github.com/JohnSundell/ShellOut) - easy command line invocations
 - [Swifter](https://github.com/httpswift/swifter) - a tiny http server
 
-## ✍️ Authors
+## 💁 How to contribute
 
-* [Christian Treffs](https://github.com/ctreffs)
+If you want to contribute please see the [CONTRIBUTION GUIDE](CONTRIBUTING.md) first. 
 
-See also the list of [contributors](https://github.com/ctreffs/SwiftSimctl/graphs/contributors) who participated in this project.
+Before commiting code please ensure to run:
+
+- `make precommit`
+
+This project is currently maintained by [@ctreffs](https://github.com/ctreffs).   
+See also the list of [contributors](https://github.com/ctreffs/SwiftSimctl/contributors) who participated in this project.
 
 ## 🔏 Licenses
 
