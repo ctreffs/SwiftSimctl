@@ -1,6 +1,6 @@
 # Swift Simctl
 
-![CI](https://github.com/ctreffs/SwiftSimctl/workflows/CI/badge.svg)
+[![macOS](https://github.com/ctreffs/SwiftSimctl/actions/workflows/ci-macos.yml/badge.svg)](https://github.com/ctreffs/SwiftSimctl/actions/workflows/ci-macos.yml)
 [![license](https://img.shields.io/badge/license-MIT-brightgreen.svg)](https://github.com/ctreffs/SwiftSimctl/blob/master/LICENSE)   
 [![swift-version-compatibility](https://img.shields.io/endpoint?url=https%3A%2F%2Fswiftpackageindex.com%2Fapi%2Fpackages%2Fctreffs%2FSwiftSimctl%2Fbadge%3Ftype%3Dswift-versions)](https://swiftpackageindex.com/ctreffs/SwiftSimctl)
 [![platform-compatibility](https://img.shields.io/endpoint?url=https%3A%2F%2Fswiftpackageindex.com%2Fapi%2Fpackages%2Fctreffs%2FSwiftSimctl%2Fbadge%3Ftype%3Dplatforms)](https://swiftpackageindex.com/ctreffs/SwiftSimctl)
@@ -163,11 +163,16 @@ Swift Simctl would not be possible without these awesome libraries:
 - [ShellOut](https://github.com/JohnSundell/ShellOut) - easy command line invocations
 - [Swifter](https://github.com/httpswift/swifter) - a tiny http server
 
-## ✍️ Authors
+## 💁 How to contribute
 
-* [Christian Treffs](https://github.com/ctreffs)
+If you want to contribute please see the [CONTRIBUTION GUIDE](CONTRIBUTING.md) first. 
 
-See also the list of [contributors](https://github.com/ctreffs/SwiftSimctl/graphs/contributors) who participated in this project.
+Before commiting code please ensure to run:
+
+- `make precommit`
+
+This project is currently maintained by [@ctreffs](https://github.com/ctreffs).   
+See also the list of [contributors](https://github.com/ctreffs/SwiftSimctl/contributors) who participated in this project.
 
 ## 🔏 Licenses
 
