@@ -1,6 +1,6 @@
 # Swift Simctl
 
-![CI](https://github.com/ctreffs/SwiftSimctl/workflows/CI/badge.svg)
+[![macOS](https://github.com/ctreffs/SwiftSimctl/actions/workflows/ci-macos.yml/badge.svg)](https://github.com/ctreffs/SwiftSimctl/actions/workflows/ci-macos.yml)
 [![license](https://img.shields.io/badge/license-MIT-brightgreen.svg)](https://github.com/ctreffs/SwiftSimctl/blob/master/LICENSE)   
 [![swift-version-compatibility](https://img.shields.io/endpoint?url=https%3A%2F%2Fswiftpackageindex.com%2Fapi%2Fpackages%2Fctreffs%2FSwiftSimctl%2Fbadge%3Ftype%3Dswift-versions)](https://swiftpackageindex.com/ctreffs/SwiftSimctl)
 [![platform-compatibility](https://img.shields.io/endpoint?url=https%3A%2F%2Fswiftpackageindex.com%2Fapi%2Fpackages%2Fctreffs%2FSwiftSimctl%2Fbadge%3Ftype%3Dplatforms)](https://swiftpackageindex.com/ctreffs/SwiftSimctl)
