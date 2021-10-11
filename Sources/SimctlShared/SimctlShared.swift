@@ -296,7 +296,6 @@ public struct StatusBarOverride {
 }
 
 extension StatusBarOverride: Hashable { }
-extension StatusBarOverride: Equatable { }
 extension StatusBarOverride: Codable { }
 
 public struct SimulatorDeviceListing {
