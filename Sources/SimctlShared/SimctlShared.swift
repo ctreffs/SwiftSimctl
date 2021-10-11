@@ -83,6 +83,7 @@ public enum ServerPath: String {
     case iCloudSync = "/simctl/iCloudSync"
     case uninstallApp = "/simctl/uninstallApp"
     case statusBarOverrides = "/simctl/statusBarOverrides"
+    case openURL = "/simctl/openUrl"
 }
 
 /// Some permission changes will terminate the application if running.
@@ -344,3 +345,11 @@ extension SimulatorDevice {
 
 extension SimulatorDevice: Decodable { }
 extension SimulatorDevice.State: Decodable { }
+
+public struct URLContainer: Codable {
+    public let url: URL
+    
+    public init(url: URL) {
+        self.url = url
+    }
+}

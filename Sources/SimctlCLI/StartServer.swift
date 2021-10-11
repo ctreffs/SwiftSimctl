@@ -61,6 +61,10 @@ struct StartServer: ParsableCommand {
             return runCommand(.simctlClearStatusBarOverrides(device: deviceId), verbose: v)
         }
         
+        server.onOpenUrl { deviceId, _, url -> Result<String, Swift.Error> in
+            return runCommand(.simctlOpen(url: url, on: deviceId))
+        }
+
         server.startServer(on: port)
     }
     

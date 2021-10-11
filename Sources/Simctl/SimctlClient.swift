@@ -115,6 +115,13 @@ public class SimctlClient {
     public func clearStatusBarOverrides(_ completion: @escaping DataTaskCallback) {
         dataTask(.clearStatusBarOverrides(env), completion)
     }
+    
+    /// Open a url.
+    /// - Parameter url: URL to open.
+    /// - Parameter completion: Result callback of the call. Use this to wait for an expectation to fulfill in a test case.
+    public func openUrl(_ url: URL, completion: @escaping DataTaskCallback) {
+        dataTask(.openURL(env, URLContainer(url: url)), completion)
+    }
 }
 
 // MARK: - Enviroment {
@@ -248,11 +255,13 @@ extension SimctlClient {
         case uninstallApp(SimctlClientEnvironment, String)
         case setStatusBarOverrides(SimctlClientEnvironment, Set<StatusBarOverride>)
         case clearStatusBarOverrides(SimctlClientEnvironment)
+        case openURL(SimctlClientEnvironment, URLContainer)
 
         @inlinable var httpMethod: HttpMethod {
             switch self {
             case .sendPushNotification,
-                 .setStatusBarOverrides:
+                 .setStatusBarOverrides,
+                 .openURL:
                 return .post
 
             case .setPrivacy,
@@ -294,6 +303,9 @@ extension SimctlClient {
 
             case .clearStatusBarOverrides:
                 return .statusBarOverrides
+                
+            case .openURL:
+                return .openURL
             }
         }
 
@@ -312,7 +324,8 @@ extension SimctlClient {
             case let .sendPushNotification(env, _),
                  let .triggerICloudSync(env),
                  let .setStatusBarOverrides(env, _),
-                 let .clearStatusBarOverrides(env):
+                 let .clearStatusBarOverrides(env),
+                 let .openURL(env, _):
                 return setEnv(env)
 
             case let .setPrivacy(env, action, service):
@@ -347,6 +360,9 @@ extension SimctlClient {
 
             case let .setStatusBarOverrides(_, overrides):
                 return try? encoder.encode(overrides)
+                
+            case let .openURL(_, urlContainer):
+                return try? encoder.encode(urlContainer)
 
             case .setPrivacy,
                  .renameDevice,
