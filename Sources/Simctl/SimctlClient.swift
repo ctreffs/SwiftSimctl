@@ -24,8 +24,8 @@ import AppKit
 /// which in turn trigger execution of local commands on the server machine.
 public class SimctlClient {
     /// Address and port to the host machine.
-    /// 
-    /// Note: if you like to use another port here, you need to provide it 
+    ///
+    /// Note: if you like to use another port here, you need to provide it
     /// when starting up the server via the `--port` flag.
     static var host: Host = .localhost(port: 8080)
 
@@ -115,7 +115,7 @@ public class SimctlClient {
     public func clearStatusBarOverrides(_ completion: @escaping DataTaskCallback) {
         dataTask(.clearStatusBarOverrides(env), completion)
     }
-    
+
     /// Open a url.
     /// - Parameter url: URL to open.
     /// - Parameter completion: Result callback of the call. Use this to wait for an expectation to fulfill in a test case.
@@ -303,7 +303,7 @@ extension SimctlClient {
 
             case .clearStatusBarOverrides:
                 return .statusBarOverrides
-                
+
             case .openURL:
                 return .openURL
             }
@@ -360,7 +360,7 @@ extension SimctlClient {
 
             case let .setStatusBarOverrides(_, overrides):
                 return try? encoder.encode(overrides)
-                
+
             case let .openURL(_, urlContainer):
                 return try? encoder.encode(urlContainer)
 

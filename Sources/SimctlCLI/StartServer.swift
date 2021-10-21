@@ -5,26 +5,25 @@
 //  Created by Christian Treffs on 18.03.20.
 //
 
+import ArgumentParser
 import Foundation
 import ShellOut
 import SimctlShared
 import Swifter
-import ArgumentParser
 
 struct StartServer: ParsableCommand {
-
     static var configuration = CommandConfiguration(abstract: "Start the server that will be called by your test code to run the commands")
-    
+
     @Option(name: .shortAndLong, help: "The port to listen on")
     var port: SimctlShared.Port = Port(8080)
-    
+
     @Flag(name: .shortAndLong, help: "Show the commands received and the responses sent")
     var verbose = false
-    
+
     mutating func run() throws {
         let server = SimctlServer()
         let v = verbose
-        
+
         server.onPushNotification { deviceId, bundleId, pushContent -> Result<String, Swift.Error> in
             return runCommand(.simctlPush(to: deviceId, pushContent: pushContent, bundleIdentifier: bundleId), verbose: v)
         }
@@ -60,14 +59,13 @@ struct StartServer: ParsableCommand {
         server.onClearStatusBarOverrides { deviceId, _ -> Result<String, Swift.Error> in
             return runCommand(.simctlClearStatusBarOverrides(device: deviceId), verbose: v)
         }
-        
+
         server.onOpenUrl { deviceId, _, url -> Result<String, Swift.Error> in
             return runCommand(.simctlOpen(url: url, on: deviceId))
         }
 
         server.startServer(on: port)
     }
-    
 }
 
 private func runCommand(_ cmd: ShellOutCommand, verbose: Bool = false) -> Result<String, Swift.Error> {

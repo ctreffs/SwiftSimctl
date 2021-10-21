@@ -113,7 +113,7 @@ public enum PrivacyService: String {
     case photosAdd = " photos-add"
     /// Allow full access to the photo library.
     case photos
-    ///ibrary - Allow access to the media library.
+    /// Allow access to the media library.
     case media
     /// Allow access to audio input.
     case microphone
@@ -347,7 +347,7 @@ extension SimulatorDevice.State: Decodable { }
 
 public struct URLContainer: Codable {
     public let url: URL
-    
+
     public init(url: URL) {
         self.url = url
     }
