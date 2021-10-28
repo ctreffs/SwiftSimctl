@@ -1,68 +1,53 @@
-# Version 1.0.0
-UNAME_S := $(shell uname -s)
 BINDIR_PREFIX?=/usr/local
 SIMCTLCLI_NAME = SimctlCLI
 
+.PHONY: lint-fix
+lint-fix:
+	swiftlint --fix --format
+	swiftlint lint --quiet
+
+.PHONY: buildRelease
 buildRelease:
 	swift build -c release
 
-# Build SimctlCLI release
+.PHONY: buildSimctlCLI
 buildSimctlCLI:
 	@printf "Building SimctlCLI..."
 	@swift build -Xswiftc -Osize -Xswiftc -whole-module-optimization -c release --product $(SIMCTLCLI_NAME) 
 	@cp "`swift build -c release --product $(SIMCTLCLI_NAME) --show-bin-path`/$(SIMCTLCLI_NAME)" ./bin
 	@echo "Done"
 
+.PHONY: cleanBuildSimctlCLI
 cleanBuildSimctlCLI: cleanArtifacts buildSimctlCLI
 
+.PHONY: installSimctlCLI
 installSimctlCLI: buildSimctlCLI
 	@mkdir -p $(BINDIR_PREFIX)/bin
 	@install `swift build -c release --product $(SIMCTLCLI_NAME) --show-bin-path`/$(SIMCTLCLI_NAME) $(BINDIR_PREFIX)/bin
 	@echo "Installed $(SIMCTLCLI_NAME) to $(BINDIR_PREFIX)/bin/$(SIMCTLCLI_NAME)"
 
+.PHONY: uninstallSimctlCLI
 uninstallSimctlCLI:
 	@rm -f $(BINDIR_PREFIX)/bin/$(SIMCTLCLI_NAME)
 	@echo "Removed $(BINDIR_PREFIX)/bin/$(SIMCTLCLI_NAME)"
 
-# Lint
-lint:
-	swiftlint autocorrect --format
-	swiftlint lint --quiet
+.PHONY: precommit
+precommit: lint-fix
 
-lintErrorOnly:
-	@swiftlint autocorrect --format --quiet
-	@swiftlint lint --quiet | grep error
-
-# Git
-precommit: lint genLinuxTests
-
-submodule:
-	git submodule init
-	git submodule update --recursive
-
-# Tests
+.PHONY: genLinuxTests
 genLinuxTests:
 	swift test --generate-linuxmain
-	swiftlint autocorrect --format --path Tests/
+	swiftlint --fix --format --path Tests/
 
+.PHONY: test
 test: genLinuxTests
 	swift test
 
-# Package
-latest:
-	swift package update
-
-resolve:
-	swift package resolve
-
-# Xcode
+.PHONY: genXcode
 genXcode:
 	swift package generate-xcodeproj --enable-code-coverage --skip-extra-files
 
-genXcodeOpen: genXcode
-	open *.xcodeproj
-
-# Clean
+.PHONY: clean
 clean:
 	swift package reset
 	rm -rdf .swiftpm/xcode
@@ -70,10 +55,12 @@ clean:
 	rm Package.resolved
 	rm .DS_Store
 
+.PHONY: cleanArtifacts
 cleanArtifacts:
 	swift package clean
 
 # Test links in README
 # requires <https://github.com/tcort/markdown-link-check>
+.PHONY: testReadme
 testReadme:
 	markdown-link-check -p -v ./README.md
