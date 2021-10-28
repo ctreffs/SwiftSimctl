@@ -25,43 +25,43 @@ struct StartServer: ParsableCommand {
         let v = verbose
 
         server.onPushNotification { deviceId, bundleId, pushContent -> Result<String, Swift.Error> in
-            return runCommand(.simctlPush(to: deviceId, pushContent: pushContent, bundleIdentifier: bundleId), verbose: v)
+            runCommand(.simctlPush(to: deviceId, pushContent: pushContent, bundleIdentifier: bundleId), verbose: v)
         }
 
         server.onPrivacy { deviceId, bundleId, action, service -> Result<String, Swift.Error> in
-            return runCommand(.simctlPrivacy(action, permissionsFor: service, on: deviceId, bundleIdentifier: bundleId), verbose: v)
+            runCommand(.simctlPrivacy(action, permissionsFor: service, on: deviceId, bundleIdentifier: bundleId), verbose: v)
         }
 
         server.onRename { deviceId, _, newName -> Result<String, Swift.Error> in
-            return runCommand(.simctlRename(device: deviceId, to: newName), verbose: v)
+            runCommand(.simctlRename(device: deviceId, to: newName), verbose: v)
         }
 
         server.onTerminateApp { deviceId, _, appBundleId -> Result<String, Swift.Error> in
-            return runCommand( .simctlTerminateApp(device: deviceId, appBundleIdentifier: appBundleId), verbose: v)
+            runCommand( .simctlTerminateApp(device: deviceId, appBundleIdentifier: appBundleId), verbose: v)
         }
 
         server.onSetDeviceAppearance { deviceId, _, appearance -> Result<String, Swift.Error> in
-            return runCommand(.simctlSetUI(appearance: appearance, on: deviceId), verbose: v)
+            runCommand(.simctlSetUI(appearance: appearance, on: deviceId), verbose: v)
         }
 
         server.onTriggerICloudSync { deviceId, _ -> Result<String, Swift.Error> in
-            return runCommand(.simctlTriggerICloudSync(device: deviceId), verbose: v)
+            runCommand(.simctlTriggerICloudSync(device: deviceId), verbose: v)
         }
 
         server.onUninstallApp { deviceId, _, appBundleId -> Result<String, Swift.Error> in
-            return runCommand(.simctlUninstallApp(device: deviceId, appBundleIdentifier: appBundleId), verbose: v)
+            runCommand(.simctlUninstallApp(device: deviceId, appBundleIdentifier: appBundleId), verbose: v)
         }
 
         server.onSetStatusBarOverride { deviceId, _, overrides -> Result<String, Swift.Error> in
-            return runCommand(.simctlSetStatusBarOverrides(device: deviceId, overrides: overrides), verbose: v)
+            runCommand(.simctlSetStatusBarOverrides(device: deviceId, overrides: overrides), verbose: v)
         }
 
         server.onClearStatusBarOverrides { deviceId, _ -> Result<String, Swift.Error> in
-            return runCommand(.simctlClearStatusBarOverrides(device: deviceId), verbose: v)
+            runCommand(.simctlClearStatusBarOverrides(device: deviceId), verbose: v)
         }
 
         server.onOpenUrl { deviceId, _, url -> Result<String, Swift.Error> in
-            return runCommand(.simctlOpen(url: url, on: deviceId))
+            runCommand(.simctlOpen(url: url, on: deviceId))
         }
 
         server.startServer(on: port)
