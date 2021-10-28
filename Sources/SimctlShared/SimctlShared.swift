@@ -83,6 +83,7 @@ public enum ServerPath: String {
     case iCloudSync = "/simctl/iCloudSync"
     case uninstallApp = "/simctl/uninstallApp"
     case statusBarOverrides = "/simctl/statusBarOverrides"
+    case openURL = "/simctl/openUrl"
 }
 
 /// Some permission changes will terminate the application if running.
@@ -112,7 +113,7 @@ public enum PrivacyService: String {
     case photosAdd = " photos-add"
     /// Allow full access to the photo library.
     case photos
-    ///ibrary - Allow access to the media library.
+    /// Allow access to the media library.
     case media
     /// Allow access to audio input.
     case microphone
@@ -295,7 +296,6 @@ public struct StatusBarOverride {
 }
 
 extension StatusBarOverride: Hashable { }
-extension StatusBarOverride: Equatable { }
 extension StatusBarOverride: Codable { }
 
 public struct SimulatorDeviceListing {
@@ -344,3 +344,11 @@ extension SimulatorDevice {
 
 extension SimulatorDevice: Decodable { }
 extension SimulatorDevice.State: Decodable { }
+
+public struct URLContainer: Codable {
+    public let url: URL
+
+    public init(url: URL) {
+        self.url = url
+    }
+}

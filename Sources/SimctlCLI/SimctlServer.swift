@@ -286,4 +286,37 @@ internal final class SimctlServer {
             }
         }
     }
+
+    /// Callback to be executed on open url request.
+    /// - Parameter closure: The closure to be executed.
+    func onOpenUrl(_ closure: @escaping (UUID, String?, URL) -> Result<String, Swift.Error>) {
+        server.POST[ServerPath.openURL.rawValue] = { request in
+            guard let deviceId = request.headerValue(for: .deviceUdid, UUID.init) else {
+                return .badRequest(.text("Device Udid missing or corrupt."))
+            }
+
+            guard let bundleId = request.headerValue(for: .bundleIdentifier) else {
+                return .badRequest(.text("Bundle Id missing or corrupt."))
+            }
+
+            let bodyData = Data(request.body)
+            let urlContainer: URLContainer
+
+            do {
+                urlContainer = try JSONDecoder().decode(URLContainer.self, from: bodyData)
+            } catch {
+                return .badRequest(.text(error.localizedDescription))
+            }
+
+            let result = closure(deviceId, bundleId, urlContainer.url)
+
+            switch result {
+            case let .success(output):
+                return .ok(.text(output))
+
+            case let .failure(error):
+                return .badRequest(.text(error.localizedDescription))
+            }
+        }
+    }
 }

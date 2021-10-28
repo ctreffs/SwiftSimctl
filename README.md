@@ -40,6 +40,7 @@ The following commands will be available in code in your (test) targets:
 - Terminate app by bundle id
 - Rename device
 - Trigger iCloud Sync
+- Open URLs including registered URL schemes
 
 ## ❔ Why would you (not) use this
 

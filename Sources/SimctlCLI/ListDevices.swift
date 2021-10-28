@@ -5,20 +5,18 @@
 //  Created by Christian Treffs on 18.03.20.
 //
 
+import ArgumentParser
 import Foundation
 import ShellOut
 import SimctlShared
 import Swifter
-import ArgumentParser
 
 public enum ListDevicesError: Swift.Error {
     case dataConversionFailed
 }
 
 struct ListDevices: ParsableCommand {
-    
     static var configuration = CommandConfiguration(abstract: "List the simulator devices")
-
 
     mutating func run() throws {
         print("\(listDevices().map { $0.description }.sorted().joined(separator: "\n"))")
