@@ -17,7 +17,7 @@ It enables, among other things, reliable **fully automated** testing of Push Not
 ### 🚧 Architecture
 
 <p align="center">
-	<a href="docs/Overview.png" target="_blank"><img src="docs/Overview.png" height="500"/></a>
+	<a href="docs/Overview.jpg" target="_blank"><img src="docs/Overview.png" height="500"/></a>
 </p>
 
 Swift Simctl is made of two parts. `SimctlCLI` and `Simctl`.
