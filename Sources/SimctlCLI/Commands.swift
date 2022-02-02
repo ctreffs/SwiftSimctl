@@ -95,7 +95,7 @@ extension ShellOutCommand {
     static func simctlTerminateApp(device: UUID, appBundleIdentifier: String) -> ShellOutCommand {
         .init(string: simctl("terminate \(device.uuidString) \(appBundleIdentifier)"))
     }
-    
+
     static func simctlErase(device: UUID) -> ShellOutCommand {
         .init(string: simctl("erase \(device.uuidString)"))
     }

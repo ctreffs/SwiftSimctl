@@ -154,18 +154,19 @@ internal final class SimctlServer {
             }
         }
     }
-    
+
     func onErase(_ closure: @escaping (UUID) -> Result<String, Swift.Error>) {
         server.GET[ServerPath.erase.rawValue] = { request in
             guard let deviceId = request.headerValue(for: .deviceUdid, UUID.init) else {
                 return .badRequest(.text("Device Udid missing or corrupt."))
             }
-            
+
             let result = closure(deviceId)
-            
+
             switch result {
             case let .success(output):
                 return .ok(.text(output))
+
             case let .failure(error):
                 return .badRequest(.text(error.localizedDescription))
             }

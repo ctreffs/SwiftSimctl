@@ -39,7 +39,7 @@ struct StartServer: ParsableCommand {
         server.onTerminateApp { deviceId, _, appBundleId -> Result<String, Swift.Error> in
             runCommand( .simctlTerminateApp(device: deviceId, appBundleIdentifier: appBundleId), verbose: v)
         }
-        
+
         server.onErase { deviceId -> Result<String, Swift.Error> in
             runCommand( .simctlErase(device: deviceId), verbose: v)
         }

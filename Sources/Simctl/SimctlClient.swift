@@ -79,7 +79,7 @@ public class SimctlClient {
     public func terminateApp(_ appBundleIdentifier: String, _ completion: @escaping DataTaskCallback) {
         dataTask(.terminateApp(env, appBundleIdentifier), completion)
     }
-    
+
     /// Reset the contents and settings of the simulator
     /// - Parameters:
     ///   - completion: Result callback of the call. Use this to wait for an expectation to fulfill in a test case.
@@ -297,7 +297,7 @@ extension SimctlClient {
 
             case .terminateApp:
                 return .terminateApp
-                
+
             case .erase:
                 return .erase
 
