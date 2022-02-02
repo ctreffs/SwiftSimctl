@@ -41,6 +41,7 @@ The following commands will be available in code in your (test) targets:
 - Rename device
 - Trigger iCloud Sync
 - Open URLs including registered URL schemes
+- Erase the contents and settings of the simulator
 
 ## ❔ Why would you (not) use this
 
