@@ -79,6 +79,13 @@ public class SimctlClient {
     public func terminateApp(_ appBundleIdentifier: String, _ completion: @escaping DataTaskCallback) {
         dataTask(.terminateApp(env, appBundleIdentifier), completion)
     }
+    
+    /// Reset the contents and settings of the simulator
+    /// - Parameters:
+    ///   - completion: Result callback of the call. Use this to wait for an expectation to fulfill in a test case.
+    public func erase(_ completion: @escaping DataTaskCallback) {
+        dataTask(.erase(env), completion)
+    }
 
     /// Set the device UI appearance to given appearance
     /// - Parameters:
@@ -250,6 +257,7 @@ extension SimctlClient {
         case setPrivacy(SimctlClientEnvironment, PrivacyAction, PrivacyService)
         case renameDevice(SimctlClientEnvironment, String)
         case terminateApp(SimctlClientEnvironment, String)
+        case erase(SimctlClientEnvironment)
         case setDeviceAppearance(SimctlClientEnvironment, DeviceAppearance)
         case triggerICloudSync(SimctlClientEnvironment)
         case uninstallApp(SimctlClientEnvironment, String)
@@ -267,6 +275,7 @@ extension SimctlClient {
             case .setPrivacy,
                  .renameDevice,
                  .terminateApp,
+                 .erase,
                  .setDeviceAppearance,
                  .triggerICloudSync,
                  .uninstallApp,
@@ -288,6 +297,9 @@ extension SimctlClient {
 
             case .terminateApp:
                 return .terminateApp
+                
+            case .erase:
+                return .erase
 
             case .setDeviceAppearance:
                 return .deviceAppearance
@@ -322,6 +334,7 @@ extension SimctlClient {
 
             switch self {
             case let .sendPushNotification(env, _),
+                 let .erase(env),
                  let .triggerICloudSync(env),
                  let .setStatusBarOverrides(env, _),
                  let .clearStatusBarOverrides(env),
@@ -367,6 +380,7 @@ extension SimctlClient {
             case .setPrivacy,
                  .renameDevice,
                  .terminateApp,
+                 .erase,
                  .setDeviceAppearance,
                  .triggerICloudSync,
                  .uninstallApp,
