@@ -40,6 +40,10 @@ struct StartServer: ParsableCommand {
             runCommand( .simctlTerminateApp(device: deviceId, appBundleIdentifier: appBundleId), verbose: v)
         }
 
+        server.onErase { deviceId -> Result<String, Swift.Error> in
+            runCommand( .simctlErase(device: deviceId), verbose: v)
+        }
+
         server.onSetDeviceAppearance { deviceId, _, appearance -> Result<String, Swift.Error> in
             runCommand(.simctlSetUI(appearance: appearance, on: deviceId), verbose: v)
         }

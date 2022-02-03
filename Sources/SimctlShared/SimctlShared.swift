@@ -79,6 +79,7 @@ public enum ServerPath: String {
     case privacy = "/simctl/setPrivacy"
     case renameDevice = "/simctl/renameDevice"
     case terminateApp = "/simctl/terminateApp"
+    case erase = "/simctl/erase"
     case deviceAppearance = "/simctl/setDeviceAppearance"
     case iCloudSync = "/simctl/iCloudSync"
     case uninstallApp = "/simctl/uninstallApp"

@@ -96,6 +96,10 @@ extension ShellOutCommand {
         .init(string: simctl("terminate \(device.uuidString) \(appBundleIdentifier)"))
     }
 
+    static func simctlErase(device: UUID) -> ShellOutCommand {
+        .init(string: simctl("erase \(device.uuidString)"))
+    }
+
     /// Trigger iCloud sync on a device.
     ///
     /// Usage: simctl icloud_sync <device>
