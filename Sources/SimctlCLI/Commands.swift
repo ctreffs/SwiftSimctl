@@ -137,6 +137,31 @@ extension ShellOutCommand {
     static func simctlSetStatusBarOverrides(device: UUID, overrides: Set<StatusBarOverride>) -> ShellOutCommand {
         .init(string: simctl("status_bar \(device.uuidString) override \(overrides.map { $0.command }.joined(separator: " "))"))
     }
+
+    /// Install an xcappdata package to a device, replacing the current contents of the container.
+    ///
+    /// Usage: simctl install_app_data <device> <path to xcappdata package>
+    /// This will replace the current contents of the container. If the app is currently running it will be terminated before the container is replaced.
+    static func simctlInstallAppData(device: UUID, appData: URL) -> ShellOutCommand {
+        .init(string: simctl("install_app_data \(device.uuidString) \(appData.path)"))
+    }
+
+    /// Print the path of the installed app's container
+    ///
+    /// Usage: simctl get_app_container <device> <app bundle identifier> [<container>]
+    ///
+    /// container   Optionally specify the container. Defaults to app.
+    ///     app                 The .app bundle
+    ///     data                The application's data container
+    ///     groups              The App Group containers
+    ///     <group identifier>  A specific App Group container
+    static func simctlGetAppContainer(device: UUID, appBundleIdentifier: String, container: AppContainer? = nil) -> ShellOutCommand {
+        if let container = container {
+            return .init(string: simctl("get_app_container \(device.uuidString) \(appBundleIdentifier) \(container.container)"))
+        } else {
+            return .init(string: simctl("get_app_container \(device.uuidString) \(appBundleIdentifier)"))
+        }
+    }
 }
 
 internal enum ListFilterType: String {

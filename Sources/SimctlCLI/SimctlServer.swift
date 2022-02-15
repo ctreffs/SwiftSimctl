@@ -337,4 +337,35 @@ internal final class SimctlServer {
             }
         }
     }
+
+    func onGetAppContainer(_ closure: @escaping (UUID, String, AppContainer) -> Result<String, Swift.Error>) {
+        server.POST[ServerPath.getAppContainer.rawValue] = { request in
+            guard let deviceId = request.headerValue(for: .deviceUdid, UUID.init) else {
+                return .badRequest(.text("Device Udid missing or corrupt."))
+            }
+
+            guard let bundleId = request.headerValue(for: .bundleIdentifier) else {
+                return .badRequest(.text("Bundle Id missing or corrupt."))
+            }
+
+            let bodyData = Data(request.body)
+
+            let appContainer: AppContainer
+            do {
+                appContainer = try JSONDecoder().decode(AppContainer.self, from: bodyData)
+            } catch {
+                return .badRequest(.text(error.localizedDescription))
+            }
+
+            let result = closure(deviceId, bundleId, appContainer)
+
+            switch result {
+            case let .success(output):
+                return .ok(.text(output))
+
+            case let .failure(error):
+                return .badRequest(.text(error.localizedDescription))
+            }
+        }
+    }
 }

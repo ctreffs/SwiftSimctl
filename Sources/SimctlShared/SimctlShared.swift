@@ -85,6 +85,7 @@ public enum ServerPath: String {
     case uninstallApp = "/simctl/uninstallApp"
     case statusBarOverrides = "/simctl/statusBarOverrides"
     case openURL = "/simctl/openUrl"
+    case getAppContainer = "/simctl/getAppContainer"
 }
 
 /// Some permission changes will terminate the application if running.
@@ -351,5 +352,25 @@ public struct URLContainer: Codable {
 
     public init(url: URL) {
         self.url = url
+    }
+}
+
+public enum AppContainer: Codable {
+    case app
+    case data
+    case groups
+    case groupIdentifier(String)
+
+    public var container: String {
+        switch self {
+        case .app:
+            return "app"
+        case .data:
+            return "data"
+        case .groups:
+            return "groups"
+        case let .groupIdentifier(groupId):
+            return groupId
+        }
     }
 }

@@ -68,6 +68,10 @@ struct StartServer: ParsableCommand {
             runCommand(.simctlOpen(url: url, on: deviceId))
         }
 
+        server.onGetAppContainer { deviceId, appBundleId, container -> Result<String, Swift.Error> in
+            runCommand(.simctlGetAppContainer(device: deviceId, appBundleIdentifier: appBundleId, container: container))
+        }
+
         server.startServer(on: port)
     }
 }
