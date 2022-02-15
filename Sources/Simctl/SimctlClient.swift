@@ -129,6 +129,10 @@ public class SimctlClient {
     public func openUrl(_ url: URL, completion: @escaping DataTaskCallback) {
         dataTask(.openURL(env, URLContainer(url: url)), completion)
     }
+
+    public func getAppContainer(_ container: AppContainer? = nil, completion: @escaping DataTaskCallback) {
+        dataTask(.getAppContainer(env, container), completion)
+    }
 }
 
 // MARK: - Enviroment {
@@ -264,12 +268,14 @@ extension SimctlClient {
         case setStatusBarOverrides(SimctlClientEnvironment, Set<StatusBarOverride>)
         case clearStatusBarOverrides(SimctlClientEnvironment)
         case openURL(SimctlClientEnvironment, URLContainer)
+        case getAppContainer(SimctlClientEnvironment, AppContainer?)
 
         @inlinable var httpMethod: HttpMethod {
             switch self {
             case .sendPushNotification,
                  .setStatusBarOverrides,
-                 .openURL:
+                 .openURL,
+                 .getAppContainer:
                 return .post
 
             case .setPrivacy,
@@ -318,6 +324,9 @@ extension SimctlClient {
 
             case .openURL:
                 return .openURL
+
+            case .getAppContainer:
+                return .getAppContainer
             }
         }
 
@@ -338,7 +347,8 @@ extension SimctlClient {
                  let .triggerICloudSync(env),
                  let .setStatusBarOverrides(env, _),
                  let .clearStatusBarOverrides(env),
-                 let .openURL(env, _):
+                 let .openURL(env, _),
+                 let .getAppContainer(env, _):
                 return setEnv(env)
 
             case let .setPrivacy(env, action, service):
@@ -376,6 +386,9 @@ extension SimctlClient {
 
             case let .openURL(_, urlContainer):
                 return try? encoder.encode(urlContainer)
+
+            case let .getAppContainer(_, container):
+                return try? encoder.encode(container)
 
             case .setPrivacy,
                  .renameDevice,
