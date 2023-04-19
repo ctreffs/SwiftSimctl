@@ -19,7 +19,7 @@ extension ShellOutCommand {
     }
 
     private static func simctl(_ cmd: String) -> String {
-        "xcrun simctl \(cmd)"
+        "xcrun simctl --set testing \(cmd)"
     }
 
     /// Usage: simctl list [-j | --json] [-v] [devices|devicetypes|runtimes|pairs] [<search term>|available]
